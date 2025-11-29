@@ -1,0 +1,71 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Films | Jeffkim Aminiel Kimo</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body { padding: 36px 0 48px; }
+    .page-header { text-align: center; margin-bottom: 24px; }
+    .page-header h1 { color: #f6c344; }
+    .back-link { color: #f6c344; text-decoration: none; font-weight: 700; }
+    .back-link:hover { text-decoration: underline; }
+    .film-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+    .film-grid.single { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); max-width: 360px; margin: 12px auto 0; width: 100%; }
+    .film-card { background: rgba(13, 14, 20, 0.8); border: 1px solid rgba(255, 215, 128, 0.16); border-radius: 18px; padding: 18px; box-shadow: 0 25px 60px rgba(0,0,0,0.55); display: grid; gap: 10px; }
+    .film-card h3 { color: #f8f3e8; margin-bottom: 8px; }
+    .film-card .meta { color: #f6c344; font-weight: 700; }
+    .poster {
+      height: 420px;
+      border-radius: 12px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.4);
+      background-color: #0b0c12;
+    }
+    .poster.echoes { background-image: url('The mask.png'); }
+    .poster.anxiety { background-image: url('Anxiety.png'); }
+    .poster.college-day { background-image: url('A College Day.png'); }
+    .poster.boiling-point { background-image: url('The Boiling Point.png'); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="page-header">
+      <a class="back-link" href="portfolio.html">&#8592; Back to portfolio</a>
+      <h1>Films</h1>
+      <p class="eyebrow">Screen stories and showcases</p>
+    </div>
+    <div class="film-grid">
+      <div class="film-card">
+        <div class="poster echoes" aria-hidden="true"></div>
+        <h3>The Mask</h3>
+        <p class="meta">Short - Director | Actor | Editor - 2025</p>
+        <p><a class="details-btn" href="mask.html">Watch</a></p>
+      </div>
+      <div class="film-card">
+        <div class="poster anxiety" aria-hidden="true"></div>
+        <h3>Anxiety</h3>
+        <p class="meta">Short - Director | Actor | Editor - 2025</p>
+        <p><a class="details-btn" href="anxiety.html">Watch</a></p>
+      </div>
+      <div class="film-card">
+        <div class="poster college-day" aria-hidden="true"></div>
+        <h3>A College Day</h3>
+        <p class="meta">Short - Director | Actor | Editor - 2025</p>
+        <p><a class="details-btn" href="college-day.html">Watch</a></p>
+      </div>
+    </div>
+    <div class="film-grid single">
+      <div class="film-card">
+        <div class="poster boiling-point" aria-hidden="true"></div>
+        <h3>The Boiling Point</h3>
+        <p class="meta">Short - Director | Actor | Editor - 2025</p>
+        <p><a class="details-btn" href="boiling-point.html">Watch</a></p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
