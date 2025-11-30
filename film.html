@@ -11,7 +11,7 @@
     .page-header h1 { color: #f6c344; }
     .back-link { color: #f6c344; text-decoration: none; font-weight: 700; }
     .back-link:hover { text-decoration: underline; }
-    .film-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+    .film-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
     .film-card { background: rgba(13, 14, 20, 0.8); border: 1px solid rgba(255, 215, 128, 0.16); border-radius: 18px; padding: 18px; box-shadow: 0 25px 60px rgba(0,0,0,0.55); display: grid; gap: 10px; }
     .film-card h3 { color: #f8f3e8; margin-bottom: 8px; }
     .film-card .meta { color: #f6c344; font-weight: 700; }
@@ -30,6 +30,8 @@
     .poster.boiling-point { background-image: url('The Boiling Point.png'); }
     .poster.missed { background-image: url('Missed.png'); }
     .poster.new-chapter { background-image: url('the new chapter.png'); }
+    @media (max-width: 980px) { .film-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 640px) { .film-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -43,7 +45,7 @@
       <div class="film-card">
         <div class="poster missed" aria-hidden="true"></div>
         <h3>Missed</h3>
-        <p class="meta">Short - Coming soon</p>
+        <p class="meta">Short - Director | Actor | Editor - 2025</p>
         <p><a class="details-btn" href="missed.html">Watch</a></p>
       </div>
       <div class="film-card">
