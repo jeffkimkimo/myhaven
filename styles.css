@@ -9,7 +9,9 @@
   --shadow: 0 25px 60px rgba(0, 0, 0, 0.55);
   --radius: 18px;
 }
-
+.intro{
+  padding-bottom:10px;
+}
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body {
