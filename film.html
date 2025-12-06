@@ -32,23 +32,6 @@
     .poster.missed { background-image: url('Missed.png'); }
     .poster.new-chapter { background-image: url('The New Chapter.png'); }
     .poster.death-of-cinema { background-image: url('Death of cinema 1.png'); }
-    .rating {
-      border-top: 1px solid rgba(255, 215, 128, 0.16);
-      padding-top: 8px;
-      display: grid;
-      gap: 8px;
-    }
-    .rating-display { color: #c8c3b3; font-size: 0.95rem; }
-    .rating-form { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-    .rating-form label { color: #f8f3e8; font-size: 0.95rem; }
-    .rating-form select {
-      background: #0b0c12;
-      color: #f8f3e8;
-      border: 1px solid rgba(255, 215, 128, 0.2);
-      border-radius: 8px;
-      padding: 4px 8px;
-    }
-    .rating-msg { color: #c8c3b3; font-size: 0.9rem; }
     @media (max-width: 980px) { .film-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
     @media (max-width: 640px) { .film-grid { grid-template-columns: 1fr; } }
   </style>
@@ -66,147 +49,42 @@
         <h3>The Death of Cinema</h3>
         <p class="meta">Short - Director | Actor | Editor - 2026</p>
         <p><a class="details-btn" href="death-of-cinema.html">Watch</a></p>
-        <div class="rating" data-film-id="death-of-cinema">
-          <div class="rating-display">Loading rating...</div>
-          <form class="rating-form">
-            <label for="rating-death-of-cinema">Rate it:</label>
-            <select id="rating-death-of-cinema" name="rating">
-              <option value="5">5</option>
-              <option value="4">4</option>
-              <option value="3">3</option>
-              <option value="2">2</option>
-              <option value="1">1</option>
-            </select>
-            <button type="submit" class="details-btn">Submit</button>
-          </form>
-          <div class="rating-msg" aria-live="polite"></div>
-        </div>
       </div>
       <div class="film-card">
         <div class="poster missed" aria-hidden="true"></div>
         <h3>Missed</h3>
         <p class="meta">Short - Director | Actor | Editor - 2025</p>
         <p><a class="details-btn" href="missed.html">Watch</a></p>
-        <div class="rating" data-film-id="missed">
-          <div class="rating-display">Loading rating...</div>
-          <form class="rating-form">
-            <label for="rating-missed">Rate it:</label>
-            <select id="rating-missed" name="rating">
-              <option value="5">5</option>
-              <option value="4">4</option>
-              <option value="3">3</option>
-              <option value="2">2</option>
-              <option value="1">1</option>
-            </select>
-            <button type="submit" class="details-btn">Submit</button>
-          </form>
-          <div class="rating-msg" aria-live="polite"></div>
-        </div>
       </div>
       <div class="film-card">
         <div class="poster anxiety" aria-hidden="true"></div>
         <h3>Anxiety</h3>
         <p class="meta">Short - Director | Actor | Editor - 2025</p>
         <p><a class="details-btn" href="anxiety.html">Watch</a></p>
-        <div class="rating" data-film-id="anxiety">
-          <div class="rating-display">Loading rating...</div>
-          <form class="rating-form">
-            <label for="rating-anxiety">Rate it:</label>
-            <select id="rating-anxiety" name="rating">
-              <option value="5">5</option>
-              <option value="4">4</option>
-              <option value="3">3</option>
-              <option value="2">2</option>
-              <option value="1">1</option>
-            </select>
-            <button type="submit" class="details-btn">Submit</button>
-          </form>
-          <div class="rating-msg" aria-live="polite"></div>
-        </div>
       </div>
       <div class="film-card">
         <div class="poster echoes" aria-hidden="true"></div>
         <h3>The Mask</h3>
         <p class="meta">Short - Director | Actor | Editor - 2025</p>
         <p><a class="details-btn" href="mask.html">Watch</a></p>
-        <div class="rating" data-film-id="mask">
-          <div class="rating-display">Loading rating...</div>
-          <form class="rating-form">
-            <label for="rating-mask">Rate it:</label>
-            <select id="rating-mask" name="rating">
-              <option value="5">5</option>
-              <option value="4">4</option>
-              <option value="3">3</option>
-              <option value="2">2</option>
-              <option value="1">1</option>
-            </select>
-            <button type="submit" class="details-btn">Submit</button>
-          </form>
-          <div class="rating-msg" aria-live="polite"></div>
-        </div>
       </div>
       <div class="film-card">
         <div class="poster college-day" aria-hidden="true"></div>
         <h3>A College Day</h3>
         <p class="meta">Short - Director | Actor | Editor - 2025</p>
         <p><a class="details-btn" href="college-day.html">Watch</a></p>
-        <div class="rating" data-film-id="college-day">
-          <div class="rating-display">Loading rating...</div>
-          <form class="rating-form">
-            <label for="rating-college-day">Rate it:</label>
-            <select id="rating-college-day" name="rating">
-              <option value="5">5</option>
-              <option value="4">4</option>
-              <option value="3">3</option>
-              <option value="2">2</option>
-              <option value="1">1</option>
-            </select>
-            <button type="submit" class="details-btn">Submit</button>
-          </form>
-          <div class="rating-msg" aria-live="polite"></div>
-        </div>
       </div>
       <div class="film-card">
         <div class="poster boiling-point" aria-hidden="true"></div>
         <h3>The Boiling Point</h3>
         <p class="meta">Short - Director | Actor | Editor - 2025</p>
         <p><a class="details-btn" href="boiling-point.html">Watch</a></p>
-        <div class="rating" data-film-id="boiling-point">
-          <div class="rating-display">Loading rating...</div>
-          <form class="rating-form">
-            <label for="rating-boiling-point">Rate it:</label>
-            <select id="rating-boiling-point" name="rating">
-              <option value="5">5</option>
-              <option value="4">4</option>
-              <option value="3">3</option>
-              <option value="2">2</option>
-              <option value="1">1</option>
-            </select>
-            <button type="submit" class="details-btn">Submit</button>
-          </form>
-          <div class="rating-msg" aria-live="polite"></div>
-        </div>
       </div>
       <div class="film-card">
         <div class="poster new-chapter" aria-hidden="true"></div>
         <h3>The New Chapter</h3>
         <p class="meta">Short - Director | Actor | Editor - 2025</p>
         <p><a class="details-btn" href="new-chapter.html">Watch</a></p>
-        <div class="rating" data-film-id="new-chapter">
-          <div class="rating-display">Loading rating...</div>
-          <form class="rating-form">
-            <label for="rating-new-chapter">Rate it:</label>
-            <select id="rating-new-chapter" name="rating">
-              <option value="5">5</option>
-              <option value="4">4</option>
-              <option value="3">3</option>
-              <option value="2">2</option>
-              <option value="1">1</option>
-            </select>
-            <button type="submit" class="details-btn">Submit</button>
-          </form>
-          <div class="rating-msg" aria-live="polite"></div>
-        </div>
       </div>
     </div>
   </div>
