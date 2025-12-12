@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Blog Photos | Jeffkim Aminiel Kimo</title>
+  <link rel="icon" type="image/png" href="jk logo.png">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body { padding: 36px 0 48px; }
+    .page-header { text-align: center; margin-bottom: 24px; }
+    .page-header h1 { color: #f6c344; }
+    .back-link { color: #f6c344; text-decoration: none; font-weight: 700; }
+    .back-link:hover { text-decoration: underline; }
+    .photos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+    .photo-card { background: rgba(13, 14, 20, 0.8); border: 1px solid rgba(255, 215, 128, 0.16); border-radius: 14px; padding: 10px; box-shadow: 0 25px 60px rgba(0,0,0,0.55); display: grid; gap: 8px; }
+    .photo-frame { aspect-ratio: 4 / 3; border-radius: 10px; overflow: hidden; background: #0b0c12; border: 1px solid rgba(255, 215, 128, 0.12); display: grid; place-items: center; color: #c8c3b3; }
+    .photo-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .photo-card p { margin: 0; color: #c8c3b3; font-size: 0.95rem; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="page-header">
+      <a class="back-link" href="blog.html">&#8592; Back to blog</a>
+      <h1>Blog Photos</h1>
+      <p class="eyebrow">Collections and moments</p>
+    </div>
+
+    <div class="notice">
+      Pictures are not yet uploaded. Come back soon.
+    </div>
+
+    <div class="photos-grid"></div>
+  </div>
+</body>
+</html>
