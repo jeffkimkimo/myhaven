@@ -33,23 +33,6 @@
       introVideo.currentTime = 0;
     }
 
-    const showStartPrompt = () => {
-      if (introOverlay.querySelector('.intro-start')) return;
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'intro-start';
-      button.textContent = 'Tap to start';
-      introOverlay.appendChild(button);
-      button.addEventListener('click', () => {
-        introVideo.muted = false;
-        const playAttempt = introVideo.play();
-        if (playAttempt && typeof playAttempt.catch === 'function') {
-          playAttempt.catch(() => {});
-        }
-        button.remove();
-      });
-    };
-
     const finishIntro = () => {
       introOverlay.classList.add('is-hidden');
       introOverlay.setAttribute('aria-hidden', 'true');
@@ -67,7 +50,7 @@
       introVideo.currentTime = 0;
       const attempt = introVideo.play();
       if (attempt && typeof attempt.catch === 'function') {
-        attempt.catch(showStartPrompt);
+        attempt.catch(() => {});
       }
     };
 
