@@ -4,6 +4,107 @@
     yearEl.textContent = new Date().getFullYear();
   }
 
+  const introOverlay = document.getElementById('intro-overlay');
+  const introVideo = document.getElementById('intro-video');
+  const introTrigger = document.getElementById('intro-trigger');
+
+  if (introOverlay && introVideo) {
+    const url = new URL(window.location.href);
+    const skipByParam = url.searchParams.has('skipIntro');
+    const isInternalReferrer = (() => {
+      if (!document.referrer) return false;
+      try {
+        const refUrl = new URL(document.referrer);
+        if (refUrl.origin === window.location.origin) {
+          return refUrl.pathname !== window.location.pathname;
+        }
+      } catch (error) {
+        if (document.referrer.includes('/myhaven/') && !document.referrer.includes('portfolio.html')) {
+          return true;
+        }
+      }
+      return false;
+    })();
+
+    if (skipByParam || isInternalReferrer) {
+      document.body.classList.remove('intro-active');
+      introVideo.muted = true;
+      introVideo.pause();
+      introVideo.currentTime = 0;
+    }
+
+    const showStartPrompt = () => {
+      if (introOverlay.querySelector('.intro-start')) return;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'intro-start';
+      button.textContent = 'Tap to start';
+      introOverlay.appendChild(button);
+      button.addEventListener('click', () => {
+        introVideo.muted = false;
+        const playAttempt = introVideo.play();
+        if (playAttempt && typeof playAttempt.catch === 'function') {
+          playAttempt.catch(() => {});
+        }
+        button.remove();
+      });
+    };
+
+    const finishIntro = () => {
+      introOverlay.classList.add('is-hidden');
+      introOverlay.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('intro-active');
+      document.body.classList.add('intro-ended');
+      introVideo.pause();
+    };
+
+    const startIntro = () => {
+      introOverlay.classList.remove('is-hidden');
+      introOverlay.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('intro-active');
+      document.body.classList.remove('intro-ended');
+      introVideo.muted = false;
+      introVideo.currentTime = 0;
+      const attempt = introVideo.play();
+      if (attempt && typeof attempt.catch === 'function') {
+        attempt.catch(showStartPrompt);
+      }
+    };
+
+    introVideo.addEventListener('ended', finishIntro);
+    introVideo.addEventListener('error', finishIntro);
+    introVideo.addEventListener('timeupdate', () => {
+      if (introVideo.currentTime >= 3.5) {
+        finishIntro();
+      }
+    });
+
+    window.addEventListener('load', () => {
+      if (skipByParam || isInternalReferrer) {
+        introVideo.muted = true;
+        introVideo.pause();
+        introVideo.currentTime = 0;
+        finishIntro();
+        if (skipByParam) {
+          url.searchParams.delete('skipIntro');
+          const cleanUrl = url.pathname + (url.searchParams.toString() ? `?${url.searchParams.toString()}` : '') + url.hash;
+          window.history.replaceState({}, '', cleanUrl);
+        }
+        return;
+      }
+      introVideo.muted = false;
+      startIntro();
+    });
+
+    if (introTrigger) {
+      introTrigger.addEventListener('click', () => {
+        startIntro();
+      });
+    }
+  } else {
+    document.body.classList.remove('intro-active');
+  }
+
   const modal = document.getElementById('modal');
   const modalContent = document.getElementById('modal-content');
   const modalClose = document.getElementById('modal-close');

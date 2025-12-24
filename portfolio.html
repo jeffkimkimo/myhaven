@@ -6,17 +6,37 @@
   <title>Jeffkim's Haven</title>
   <link rel="icon" type="image/png" href="jk logo.png">
   <link rel="stylesheet" href="styles.css">
+  <noscript>
+    <style>
+      body.intro-active .site-header,
+      body.intro-active main,
+      body.intro-active .site-footer { opacity: 1; pointer-events: auto; }
+      body.intro-active #intro-overlay { display: none; }
+    </style>
+  </noscript>
 </head>
-<body>
+<body class="intro-active">
+  <div id="intro-overlay" class="intro-overlay" aria-hidden="false">
+    <video id="intro-video" class="intro-video" autoplay playsinline>
+      <source src="intro.mov" type="video/quicktime">
+    </video>
+  </div>
   <header class="site-header">
     <div class="wrap header-row">
       <div class="brand">
-        <p class="eyebrow">Filmmaker / Computer Science Student</p>
-        <h1>Jeffkim's Portfolio</h1>
+        <button class="brand-logo" id="intro-trigger" type="button" aria-label="Play intro video">
+          <img src="torgrimstudios.png" alt="Torgrim Studios logo">
+        </button>
+        <div class="brand-text">
+          <p class="eyebrow">Filmmaker / Computer Science Student</p>
+          <h1>Jeffkim's Portfolio</h1>
+        </div>
       </div>
       <nav class="main-nav" aria-label="Primary navigation">
         <a href="#about">About</a>
         <a href="#projects">Works</a>
+        <a href="blog.html">Blog</a>
+        <a href="inspirations.html">Inspirations</a>
         <a href="#contact">Contact</a>
       </nav>
     </div>
@@ -113,11 +133,6 @@
         <article class="card" data-type="renders">
           <div class="thumb render">Blender</div>
           <p><a class="details-btn" href="blender-renders.html">View renders</a></p>
-        </article>
-
-        <article class="card" data-type="journal">
-          <div class="thumb journal">Blog</div>
-          <p><a class="details-btn" href="blog.html">Enter blog</a></p>
         </article>
 
       </div>
