@@ -50,8 +50,15 @@
       introVideo.currentTime = 0;
       const attempt = introVideo.play();
       if (attempt && typeof attempt.catch === 'function') {
-        attempt.catch(() => {});
+        attempt.catch(() => {
+          finishIntro();
+        });
       }
+      window.setTimeout(() => {
+        if (!introOverlay.classList.contains('is-hidden')) {
+          finishIntro();
+        }
+      }, 3800);
     };
 
     introVideo.addEventListener('ended', finishIntro);
