@@ -260,6 +260,11 @@ p { margin: 0; color: var(--muted); }
 
 .social-link:hover { transform: translateY(-3px); color: var(--gold); border-color: rgba(246, 195, 68, 0.5); background: rgba(246, 195, 68, 0.08); }
 .social-link svg { width: 22px; height: 22px; }
+.social-link img {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
 
 .intro-cta { display: flex; gap: 12px; flex-wrap: wrap; }
 
@@ -412,6 +417,11 @@ p { margin: 0; color: var(--muted); }
 .contact-social-link svg {
   width: 20px;
   height: 20px;
+}
+.contact-social-link img {
+  width: 20px;
+  height: 20px;
+  display: block;
 }
 
 .contact-social-link:hover {
