@@ -12,27 +12,270 @@
     .page-header h1 { color: #f6c344; }
     .back-link { color: #f6c344; text-decoration: none; font-weight: 700; }
     .back-link:hover { text-decoration: underline; }
-    .insp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
-    .insp-card { background: rgba(13, 14, 20, 0.8); border: 1px solid rgba(255, 215, 128, 0.16); border-radius: 18px; padding: 18px; box-shadow: 0 25px 60px rgba(0,0,0,0.55); display: grid; gap: 12px; }
-    .insp-card h3 { color: #f8f3e8; margin: 0; }
-    .insp-card p { color: #c8c3b3; margin: 0; }
-    .insp-card .tag { color: #f6c344; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; font-size: 0.75rem; }
+    .insp-carousel { margin-top: 32px; }
+    .carousel-shell {
+      position: relative;
+      border-radius: 26px;
+      padding: 28px;
+      background: linear-gradient(135deg, rgba(13, 14, 20, 0.92), rgba(6, 8, 14, 0.78));
+      border: 1px solid rgba(255, 215, 128, 0.2);
+      box-shadow: 0 30px 70px rgba(0,0,0,0.6);
+      overflow: hidden;
+      isolation: isolate;
+    }
+    .carousel-shell::before {
+      content: "";
+      position: absolute;
+      inset: -40% -10% auto -10%;
+      height: 140%;
+      background: radial-gradient(circle at top, rgba(246, 195, 68, 0.18), transparent 55%);
+      opacity: 0.9;
+      z-index: 0;
+    }
+    .carousel-shell::after {
+      content: "";
+      position: absolute;
+      inset: auto -10% -40% -10%;
+      height: 140%;
+      background: radial-gradient(circle at bottom, rgba(255, 214, 102, 0.14), transparent 60%);
+      opacity: 0.8;
+      z-index: 0;
+    }
+    .carousel-track {
+      display: flex;
+      align-items: stretch;
+      gap: 26px;
+      width: max-content;
+      animation: carouselScroll 120s linear infinite;
+      position: relative;
+      z-index: 1;
+      padding: 8px 6px;
+    }
+    .carousel-shell:hover .carousel-track {
+      animation-play-state: paused;
+    }
+    .insp-frame {
+      width: clamp(240px, 30vw, 320px);
+      display: grid;
+      gap: 12px;
+      text-align: center;
+    }
+    .frame-card {
+      background: rgba(8, 10, 16, 0.95);
+      border-radius: 22px;
+      padding: 12px;
+      border: 1px solid rgba(255, 215, 128, 0.22);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.55);
+      position: relative;
+      transform: rotate(var(--tilt, -1deg));
+      transition: transform 0.4s ease;
+    }
+    .frame-card::before {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 215, 128, 0.12);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+      pointer-events: none;
+    }
+    .frame-card img {
+      display: block;
+      width: 100%;
+      height: 340px;
+      object-fit: cover;
+      object-position: center 20%;
+      border-radius: 16px;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.5);
+      filter: saturate(1.05);
+    }
+    .insp-frame:hover .frame-card {
+      transform: rotate(0deg) translateY(-4px);
+    }
+    .frame-name {
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      color: #f6c344;
+    }
+    .frame-role {
+      font-size: 0.9rem;
+      color: #c8c3b3;
+    }
+    .carousel-note {
+      text-align: center;
+      margin-top: 16px;
+      color: #c8c3b3;
+      font-size: 0.95rem;
+    }
+    .insp-index {
+      margin-top: 42px;
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    }
+    .index-card {
+      background: rgba(12, 14, 20, 0.88);
+      border: 1px solid rgba(255, 215, 128, 0.14);
+      border-radius: 16px;
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.45);
+      transition: transform 0.35s ease;
+    }
+    .index-card:hover {
+      transform: translateY(-4px);
+    }
+    .index-card img {
+      width: 100%;
+      height: 260px;
+      object-fit: cover;
+      object-position: center 20%;
+      border-radius: 12px;
+    }
+    .index-name {
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-size: 0.75rem;
+      color: #f6c344;
+      text-align: center;
+    }
+    @keyframes carouselScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    @media (max-width: 700px) {
+      .carousel-shell { padding: 20px; }
+      .carousel-track { gap: 18px; animation-duration: 140s; }
+      .frame-card img { height: 300px; }
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
+  <div class="wrap" id="inspirations-wrap">
     <div class="page-header">
       <a class="back-link" href="portfolio.html?skipIntro=1">&#8592; Back to portfolio</a>
       <h1>Inspirations</h1>
       <p class="eyebrow">Voices and visions that fuel my work</p>
     </div>
 
-    <div class="insp-grid">
-      <article class="insp-card">
-        <h3>Coming soon</h3>
-        <p>Still gathering the mentors, artists, and works I want to highlight here. Check back later.</p>
-      </article>
-    </div>
+    <section class="insp-carousel">
+      <div class="carousel-shell">
+        <div class="carousel-track" id="inspiration-track" aria-live="polite"></div>
+      </div>
+      <p class="carousel-note">Drag or hover to pause the loop.</p>
+    </section>
+
+    <section class="insp-index" id="inspiration-index" aria-label="Inspiration index"></section>
   </div>
+
+  <script>
+    const inspirations = [
+      { name: 'Andrew Garfield', file: 'Andrew garfield.jpg' },
+      { name: 'Bruno Mars', file: 'Bruno mars.jpg' },
+      { name: 'James Cameron', file: 'Cameron.jpg' },
+      { name: 'Chris Evans', file: 'Chris evans.jpg' },
+      { name: 'Chris Hemsworth', file: 'Chris hemsworth.webp' },
+      { name: 'Cole Palmer', file: 'Cole Palmer.webp', position: 'center 20%' },
+      { name: 'Cristiano Ronaldo', file: 'Cristiano Ronaldo.jpg' },
+      { name: 'Daniel Craig', file: 'Daniel Craig.jpg' },
+      { name: 'Dean Ambrose', file: 'Dean ambrose.webp' },
+      { name: 'Suillaud Dylan', file: 'DylanSuillaud.jpg', position: 'center 30%' },
+      { name: 'Eden Hazard', file: 'Eden Hazard.webp' },
+      { name: 'Eminem', file: 'Eminem.webp' },
+      { name: 'Grant Gustin', file: 'Grant Gustin.jpg' },
+      { name: 'Haaland', file: 'Haaland.webp' },
+      { name: 'Hans Zimmer', file: 'Hans Zimmer.jpg' },
+      { name: 'Jack Harlow', file: 'Jack Harlow.jpg' },
+      { name: 'Jeff Hardy', file: 'Jeff Hardy.jpg' },
+      { name: 'John Cena', file: 'John Cena.avif' },
+      { name: 'Julius Nyerere', file: 'Julius Nyerere.jpeg' },
+      { name: 'Kendrick Lamar', file: 'Kendrick Lamar.jpg', position: 'center 20%' },
+      { name: 'Khantrast', file: 'Khantrast.jpg' },
+      { name: 'LeBron James', file: 'Lebron James.jpg' },
+      { name: 'Leo Messi', file: 'Leo Messi.jpg' },
+      { name: 'Lewis Hamilton', file: 'Lewis hamilton.jpg' },
+      { name: 'Mark Zuckerberg', file: 'Mark Zuckerberg.webp' },
+      { name: 'Max Verstappen', file: 'Max Verstappen.jpg' },
+      { name: 'Kylian Mbappe', file: 'Mbappe.jpg' },
+      { name: 'Mckenna Grace', file: 'Mckenna 2.jpg', position: 'center 15%' },
+      { name: 'NF', file: 'NF.jpeg' },
+      { name: 'Nelson Mandela', file: 'Nelson Mandela.avif' },
+      { name: 'Novak Djokovic', file: 'Novak Djokovic.jpg' },
+      { name: 'Randy Orton', file: 'Randy Orton.jpg' },
+      { name: 'Robert Downey Jr.', file: 'Robert Downey jr.webp' },
+      { name: 'Roman Reigns', file: 'Roman reigns.jpg' },
+      { name: 'Russo Bros', file: 'Russo Bros.webp' },
+      { name: 'Sundar Pichai', file: 'SUndar pichai.webp' },
+      { name: 'Scarlett Johansson', file: 'Scaret JOhanson.webp' },
+      { name: 'Serena Williams', file: 'Serena Williams.avif' },
+      { name: 'Seth Rollins', file: 'Seth rollins.jpg' },
+      { name: 'Steven Spielberg', file: 'Spielberg.jpg' },
+      { name: 'Stephen Curry', file: 'Stephen Curry.webp' },
+      { name: 'Steve Jobs', file: 'Steve JObs.jpg' },
+      { name: 'Tobey Maguire', file: 'TObey maguire.jpg' },
+      { name: 'Quentin Tarantino', file: 'Tarantino.jpg' },
+      { name: 'The Rock', file: 'The Rock.jpg' },
+      { name: 'Tiger Woods', file: 'Tiger woods.jpg' },
+      { name: 'Timothee Chalamet', file: 'Timothee Chalamet.jpg' },
+      { name: 'Tom Cruise', file: 'Tom Cruise.jpg' },
+      { name: 'Tom Holland', file: 'Tom Holland.webp', position: 'center 18%' },
+      { name: 'Tundu Lissu', file: 'Tundu Lissu.jpg', position: 'center 18%' },
+      { name: 'Undertaker', file: 'Undertaker.avif' },
+      { name: 'Will Smith', file: 'Will smith.webp' },
+      { name: 'Zendaya', file: 'Zendaya.webp' },
+      { name: 'Christopher Nolan', file: 'nolan.webp' },
+      { name: 'Recider', file: 'recider.jpg' },
+    ];
+
+    function shuffle(list) {
+      const array = [...list];
+      for (let i = array.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    const track = document.getElementById('inspiration-track');
+    const index = document.getElementById('inspiration-index');
+    if (track) {
+      const shuffled = shuffle(inspirations);
+      const items = shuffled.map((item) => {
+        const frame = document.createElement('figure');
+        frame.className = 'insp-frame';
+        const position = item.position ? `style="object-position:${item.position};"` : '';
+        frame.innerHTML = `
+          <div class="frame-card" style="--tilt:${(Math.random() * 4 - 2).toFixed(2)}deg">
+            <img src="inspirations/${item.file}" alt="${item.name}" ${position}>
+          </div>
+          <figcaption>
+            <div class="frame-name">${item.name}</div>
+          </figcaption>
+        `;
+        return frame;
+      });
+
+      items.forEach((node) => track.appendChild(node));
+      items.forEach((node) => track.appendChild(node.cloneNode(true)));
+    }
+
+    if (index) {
+      inspirations.forEach((item) => {
+        const card = document.createElement('article');
+        card.className = 'index-card';
+        const position = item.position ? `style="object-position:${item.position};"` : '';
+        card.innerHTML = `
+          <img src="inspirations/${item.file}" alt="${item.name}" ${position}>
+          <div class="index-name">${item.name}</div>
+        `;
+        index.appendChild(card);
+      });
+    }
+
+  </script>
 </body>
 </html>
