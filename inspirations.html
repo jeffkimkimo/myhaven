@@ -248,9 +248,10 @@
         const frame = document.createElement('figure');
         frame.className = 'insp-frame';
         const position = item.position ? `style="object-position:${item.position};"` : '';
+        const src = encodeURI(`inspirations/${item.file}`);
         frame.innerHTML = `
           <div class="frame-card" style="--tilt:${(Math.random() * 4 - 2).toFixed(2)}deg">
-            <img src="inspirations/${item.file}" alt="${item.name}" ${position}>
+            <img src="${src}" alt="${item.name}" ${position}>
           </div>
           <figcaption>
             <div class="frame-name">${item.name}</div>
@@ -268,8 +269,9 @@
         const card = document.createElement('article');
         card.className = 'index-card';
         const position = item.position ? `style="object-position:${item.position};"` : '';
+        const src = encodeURI(`inspirations/${item.file}`);
         card.innerHTML = `
-          <img src="inspirations/${item.file}" alt="${item.name}" ${position}>
+          <img src="${src}" alt="${item.name}" ${position}>
           <div class="index-name">${item.name}</div>
         `;
         index.appendChild(card);
