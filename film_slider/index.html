@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <title>Component Demo</title>
+
+   <!-- Connected Styles -->
+   <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+   <!-- ===== HTML ===== -->
+   <nav>
+      <a href="#" id="logo">Animmaster</a>
+      <a href="#">Watch Showreel</a>
+   </nav>
+   <div class="slider">
+      <div class="slide-container prev">
+         <div class="slide-img">
+            <img src="./img/img7.jpg" alt="Slide 7" />
+         </div>
+      </div>
+      <div class="slide-container active">
+         <div class="slide-img">
+            <img src="./img/img1.jpg" alt="Slide 1" />
+         </div>
+      </div>
+      <div class="slide-container next">
+         <div class="slide-img">
+            <img src="./img/img2.jpg" alt="Slide 2" />
+         </div>
+      </div>
+
+      <div class="slider-title">
+         <h1>Serene Space</h1>
+      </div>
+
+      <div class="slider-counter">
+         <p><span>1</span><span>/</span><span>7</span></p>
+      </div>
+
+      <div class="slider-items">
+         <p class="activeItem">Serene Space</p>
+         <p>Gentle Horizon</p>
+         <p>Quiet Flow</p>
+         <p>Ethereal Light</p>
+         <p>Calm Drift</p>
+         <p>Subtle Balance</p>
+         <p>Soft Whisper</p>
+      </div>
+
+      <div class="slider-preview">
+         <img src="./assets/img1.jpg" alt="" />
+      </div>
+   </div>
+
+   <footer>
+      <p>Animmaster</p>
+   </footer>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/CustomEase.min.js"></script>
+
+
+   <!-- Connected script -->
+   <script src="script.js"></script>
+</body>
+
+</html>

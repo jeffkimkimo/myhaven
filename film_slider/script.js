@@ -1,0 +1,339 @@
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof gsap === 'undefined' || typeof CustomEase === 'undefined') {
+    return
+  }
+
+  gsap.registerPlugin(CustomEase)
+
+  if (!CustomEase.get('hop')) {
+    CustomEase.create(
+      'hop',
+      'M0,0 C0.488,0.02 0.467,0.286 0.5,0.5 0.532,0.712 0.58,1 1,1',
+    )
+  }
+
+  const slider = document.querySelector('.slider')
+  const sliderTitle = document.querySelector('.slider-title')
+  const sliderCounter = document.querySelector(
+    '.slider-counter p span:first-child',
+  )
+  const sliderCounterTotal = document.querySelector(
+    '.slider-counter p span:last-child',
+  )
+  const sliderItems = document.querySelector('.slider-items')
+  const sliderPreview = document.querySelector('.slider-preview')
+  const watchLink = document.querySelector('#watch-link')
+
+  if (!slider || !sliderTitle || !sliderCounter || !sliderItems || !sliderPreview) {
+    return
+  }
+
+  const scriptSource = document.currentScript?.src ||
+    Array.from(document.scripts)
+      .find((script) => script.src.includes('film_slider/script.js') || script.src.endsWith('/script.js'))
+      ?.src
+
+  const scriptBase = scriptSource ? new URL('.', scriptSource).href : window.location.href
+
+  const defaultSliderContent = [
+    { name: 'Serene Space', img: new URL('img/img1.jpg', scriptBase).toString(), href: '#' },
+    { name: 'Gentle Horizon', img: new URL('img/img2.jpg', scriptBase).toString(), href: '#' },
+    { name: 'Quiet Flow', img: new URL('img/img3.jpg', scriptBase).toString(), href: '#' },
+    { name: 'Ethereal Light', img: new URL('img/img4.jpg', scriptBase).toString(), href: '#' },
+    { name: 'Calm Drift', img: new URL('img/img5.jpg', scriptBase).toString(), href: '#' },
+    { name: 'Subtle Balance', img: new URL('img/img6.jpg', scriptBase).toString(), href: '#' },
+    { name: 'Soft Whisper', img: new URL('img/img7.jpg', scriptBase).toString(), href: '#' },
+  ]
+
+  const sliderContent = Array.isArray(window.filmSliderConfig) && window.filmSliderConfig.length >= 3
+    ? window.filmSliderConfig
+    : defaultSliderContent
+
+  const totalSlides = sliderContent.length
+  let activeSlideIndex = 1
+  let isAnimating = false
+
+  if (sliderCounterTotal) {
+    sliderCounterTotal.textContent = String(totalSlides)
+  }
+
+  const clipPath = {
+    closed: 'polygon(25% 30%, 75% 30%, 75% 70%, 25% 70%)',
+    open: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+  }
+
+  const slidePositions = {
+    prev: { left: '15%', rotation: -90 },
+    active: { left: '50%', rotation: 0 },
+    next: { left: '85%', rotation: 90 },
+  }
+
+  function normalizeSlideIndex(index) {
+    return ((index - 1 + totalSlides) % totalSlides) + 1
+  }
+
+  function getSlideIndex(increment) {
+    return normalizeSlideIndex(activeSlideIndex + increment)
+  }
+
+  function getContentByIndex(index) {
+    return sliderContent[normalizeSlideIndex(index) - 1]
+  }
+
+  function splitTextIntoSpans(element) {
+    element.innerHTML = element.innerText
+      .split('')
+      .map((char) => `<span>${char === ' ' ? '&nbsp;&nbsp;' : char}</span>`)
+      .join('')
+  }
+
+  function createSlide(content, className) {
+    const slide = document.createElement('div')
+    slide.className = `slide-container ${className}`
+    slide.innerHTML = `<div class="slide-img"><img src="${content.img}" alt="${content.name}"></div>`
+    return slide
+  }
+
+  function buildInitialSlides() {
+    slider.querySelectorAll('.slide-container').forEach((slide) => slide.remove())
+
+    const prevSlide = createSlide(getContentByIndex(activeSlideIndex - 1), 'prev')
+    const activeSlide = createSlide(getContentByIndex(activeSlideIndex), 'active')
+    const nextSlide = createSlide(getContentByIndex(activeSlideIndex + 1), 'next')
+
+    slider.insertBefore(prevSlide, sliderTitle)
+    slider.insertBefore(activeSlide, sliderTitle)
+    slider.insertBefore(nextSlide, sliderTitle)
+
+    Object.entries(slidePositions).forEach(([key, value]) => {
+      gsap.set(`.slide-container.${key}`, {
+        ...value,
+        xPercent: -50,
+        yPercent: -50,
+        clipPath: key === 'active' ? clipPath.open : clipPath.closed,
+      })
+
+      if (key !== 'active') {
+        gsap.set(`.slide-container.${key} .slide-img`, {
+          rotation: -value.rotation,
+        })
+      }
+    })
+  }
+
+  function buildSliderItems() {
+    sliderItems.innerHTML = ''
+
+    sliderContent.forEach((content, index) => {
+      const item = document.createElement('p')
+      item.textContent = content.name
+      item.dataset.index = String(index + 1)
+      sliderItems.appendChild(item)
+    })
+  }
+
+  function updateWatchLink(index) {
+    if (!watchLink) return
+
+    const slideData = getContentByIndex(index)
+    const href = slideData.href || ''
+    const hasLink = href.trim() !== '' && href !== '#'
+
+    watchLink.href = hasLink ? href : '#'
+    watchLink.textContent = hasLink ? 'Watch film' : 'Film not yet out'
+    watchLink.classList.toggle('is-disabled', !hasLink)
+    watchLink.setAttribute('aria-disabled', String(!hasLink))
+    watchLink.tabIndex = hasLink ? 0 : -1
+  }
+
+  function updateCounterAndHighlight(index) {
+    sliderCounter.textContent = String(index)
+
+    sliderItems
+      .querySelectorAll('p')
+      .forEach((item, itemIndex) =>
+        item.classList.toggle('activeItem', itemIndex === index - 1),
+      )
+
+    updateWatchLink(index)
+  }
+
+  function updatePreviewImage(content) {
+    const newImage = document.createElement('img')
+    newImage.src = content.img
+    newImage.alt = content.name
+    sliderPreview.appendChild(newImage)
+
+    gsap.fromTo(
+      newImage,
+      { opacity: 0 },
+      {
+        opacity: 1,
+        duration: 1,
+        ease: 'power2.inOut',
+        delay: 0.45,
+        onComplete: () => {
+          const previousPreview = sliderPreview.querySelector('img:not(:last-child)')
+          if (previousPreview) {
+            previousPreview.remove()
+          }
+        },
+      },
+    )
+  }
+
+  function createAndAnimateTitle(content, direction) {
+    const newTitle = document.createElement('h1')
+    newTitle.innerText = content.name
+    sliderTitle.appendChild(newTitle)
+    splitTextIntoSpans(newTitle)
+
+    const yOffset = direction === 'next' ? 60 : -60
+
+    gsap.set(newTitle.querySelectorAll('span'), { y: yOffset })
+    gsap.to(newTitle.querySelectorAll('span'), {
+      y: 0,
+      duration: 1.25,
+      stagger: 0.02,
+      ease: 'hop',
+      delay: 0.25,
+    })
+
+    const currentTitle = sliderTitle.querySelector('h1:not(:last-child)')
+    if (currentTitle) {
+      gsap.to(currentTitle.querySelectorAll('span'), {
+        y: -yOffset,
+        duration: 1.25,
+        stagger: 0.02,
+        ease: 'hop',
+        delay: 0.25,
+        onComplete: () => currentTitle.remove(),
+      })
+    }
+  }
+
+  function animateSlide(slide, props) {
+    gsap.to(slide, { ...props, duration: 2, ease: 'hop' })
+    gsap.to(slide.querySelector('.slide-img'), {
+      rotation: -props.rotation,
+      duration: 2,
+      ease: 'hop',
+    })
+  }
+
+  function transitionSlides(direction) {
+    if (isAnimating) return
+    isAnimating = true
+
+    const [outgoingPos, incomingPos] =
+      direction === 'next' ? ['prev', 'next'] : ['next', 'prev']
+
+    const outgoingSlide = slider.querySelector(`.${outgoingPos}`)
+    const activeSlide = slider.querySelector('.active')
+    const incomingSlide = slider.querySelector(`.${incomingPos}`)
+
+    if (!outgoingSlide || !activeSlide || !incomingSlide) {
+      isAnimating = false
+      return
+    }
+
+    animateSlide(incomingSlide, {
+      ...slidePositions.active,
+      clipPath: clipPath.open,
+    })
+    animateSlide(activeSlide, {
+      ...slidePositions[outgoingPos],
+      clipPath: clipPath.closed,
+    })
+
+    gsap.to(outgoingSlide, {
+      scale: 0,
+      opacity: 0,
+      duration: 2,
+      ease: 'hop',
+    })
+
+    const newSlideIndex = getSlideIndex(direction === 'next' ? 2 : -2)
+    const newSlide = createSlide(getContentByIndex(newSlideIndex), incomingPos)
+
+    slider.insertBefore(newSlide, sliderTitle)
+
+    gsap.set(newSlide, {
+      ...slidePositions[incomingPos],
+      xPercent: -50,
+      yPercent: -50,
+      scale: 0,
+      opacity: 0,
+      clipPath: clipPath.closed,
+    })
+    gsap.to(newSlide, {
+      scale: 1,
+      opacity: 1,
+      duration: 2,
+      ease: 'hop',
+    })
+
+    const nextActiveIndex = getSlideIndex(direction === 'next' ? 1 : -1)
+    createAndAnimateTitle(getContentByIndex(nextActiveIndex), direction)
+    updatePreviewImage(getContentByIndex(nextActiveIndex))
+
+    setTimeout(() => {
+      updateCounterAndHighlight(nextActiveIndex)
+    }, 1000)
+
+    setTimeout(() => {
+      outgoingSlide.remove()
+      activeSlide.className = `slide-container ${outgoingPos}`
+      incomingSlide.className = 'slide-container active'
+      newSlide.className = `slide-container ${incomingPos}`
+      activeSlideIndex = nextActiveIndex
+      isAnimating = false
+    }, 2000)
+  }
+
+  function init() {
+    sliderTitle.innerHTML = ''
+
+    const initialTitle = document.createElement('h1')
+    initialTitle.textContent = getContentByIndex(activeSlideIndex).name
+    sliderTitle.appendChild(initialTitle)
+
+    splitTextIntoSpans(initialTitle)
+    gsap.fromTo(
+      initialTitle.querySelectorAll('span'),
+      { y: 60 },
+      { y: 0, duration: 1, stagger: 0.02, ease: 'hop' },
+    )
+
+    buildInitialSlides()
+    buildSliderItems()
+
+    sliderPreview.innerHTML = ''
+    const previewImage = document.createElement('img')
+    previewImage.src = getContentByIndex(activeSlideIndex).img
+    previewImage.alt = getContentByIndex(activeSlideIndex).name
+    sliderPreview.appendChild(previewImage)
+
+    updateCounterAndHighlight(activeSlideIndex)
+
+    slider.addEventListener('click', (event) => {
+      const clickedSlide = event.target.closest('.slide-container')
+      if (!clickedSlide || isAnimating) return
+
+      transitionSlides(clickedSlide.classList.contains('next') ? 'next' : 'prev')
+    })
+
+    sliderItems.querySelectorAll('p').forEach((item) => {
+      item.addEventListener('click', () => {
+        const targetIndex = Number(item.dataset.index)
+        if (targetIndex === activeSlideIndex || isAnimating) {
+          return
+        }
+
+        transitionSlides(targetIndex > activeSlideIndex ? 'next' : 'prev')
+      })
+    })
+  }
+
+  init()
+})

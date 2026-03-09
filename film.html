@@ -1,113 +1,172 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Films | Jeffkim Aminiel Kimo</title>
-  <link rel="icon" type="image/png" href="jklogo2.png">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/png" href="jklogo2.png" />
+  <link rel="stylesheet" href="film_slider/style.css" />
   <style>
-    body { padding: 36px 0 48px; }
-    .page-header { text-align: center; margin-bottom: 24px; }
-    .page-header h1 { color: #f6c344; }
-    .back-link { color: #f6c344; text-decoration: none; font-weight: 700; }
-    .back-link:hover { text-decoration: underline; }
-    .film-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
-    .film-card { background: rgba(13, 14, 20, 0.8); border: 1px solid rgba(255, 215, 128, 0.16); border-radius: 18px; padding: 18px; box-shadow: 0 25px 60px rgba(0,0,0,0.55); display: grid; gap: 10px; }
-    .film-card h3 { color: #f8f3e8; margin-bottom: 8px; }
-    .film-card .meta { color: #f6c344; font-weight: 700; }
-    .poster {
-      height: 420px;
-      border-radius: 12px;
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-      box-shadow: 0 18px 40px rgba(0,0,0,0.4);
-      background-color: #0b0c12;
+    nav a {
+      color: #d2d2d2;
+      letter-spacing: 0.08em;
     }
-    .poster.echoes { background-image: url('The mask.png'); }
-    .poster.anxiety { background-image: url('Anxiety.png'); }
-    .poster.college-day { background-image: url('A College Day.png'); }
-    .poster.boiling-point { background-image: url('The Boiling Point.png'); }
-    .poster.missed { background-image: url('Missed.png'); }
-    .poster.mental-state { background-image: url('The Mental State.png'); }
-    .poster.new-chapter { background-image: url('The New Chapter.png'); }
-    .poster.death-of-cinema { background-image: url('Death of cinema 1.png'); }
-    .poster.tipping-point { background-image: url('The Tipping Point.png'); }
-    .poster.robofriend { background-image: url('robofriend.png'); }
-    @media (max-width: 980px) { .film-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-    @media (max-width: 640px) { .film-grid { grid-template-columns: 1fr; } }
+
+    nav a#logo {
+      font-family: "PP Neue Montreal", sans-serif;
+      font-size: clamp(1rem, 1.5vw, 1.15rem);
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #f6c344;
+    }
+
+    nav .watch-link {
+      font-size: 0.75rem;
+      color: #f6c344;
+      border: 1px solid rgba(246, 195, 68, 0.45);
+      border-radius: 999px;
+      padding: 0.65rem 1rem;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    nav .watch-link:hover {
+      background: rgba(246, 195, 68, 0.12);
+      color: #fff;
+    }
+
+    nav .watch-link.is-disabled,
+    nav .watch-link.is-disabled:hover {
+      color: rgba(255, 255, 255, 0.58);
+      border-color: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.04);
+      transform: none;
+      box-shadow: none;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .slider-items {
+      max-height: 62vh;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      padding-right: 0.25rem;
+    }
+
+    .slider-items p {
+      max-width: 280px;
+      text-wrap: balance;
+    }
+
+    footer p {
+      color: rgba(255, 255, 255, 0.55);
+      letter-spacing: 0.08em;
+    }
+
+    @media (max-width: 900px) {
+      nav {
+        padding: 1.2em;
+      }
+
+      nav .watch-link {
+        padding: 0.5rem 0.85rem;
+      }
+
+      .slider-items {
+        left: 1.2em;
+        bottom: 1.5em;
+      }
+
+      .slider-counter {
+        bottom: 1.25em;
+      }
+
+      footer {
+        right: 1.2em;
+        bottom: 1.2em;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="page-header">
-      <a class="back-link" href="portfolio.html?skipIntro=1">&#8592; Back to portfolio</a>
-      <h1>Films</h1>
-      <p class="eyebrow">Screen stories and showcases</p>
+  <nav>
+    <a href="portfolio.html?skipIntro=1" id="logo">&larr; Back to portfolio</a>
+    <a href="robofriend.html" id="watch-link" class="watch-link">Watch film</a>
+  </nav>
+
+  <div class="slider">
+    <div class="slider-title">
+      <h1>The Mental State</h1>
     </div>
-    <div class="film-grid">
-      <div class="film-card">
-        <div class="poster mental-state" aria-hidden="true"></div>
-        <h3>The Mental State</h3>
-        <p class="meta">Short - Director | Actor | Editor - 2026</p>
-        <p><a class="details-btn" href="robofriend.html">Watch</a></p>
-      </div>
-      <div class="film-card">
-        <div class="poster tipping-point" aria-hidden="true"></div>
-        <h3>The Tipping Point</h3>
-        <p class="meta">Short - Director | Actor | Editor - 2026</p>
-        <p><a class="details-btn" href="robofriend.html">Watch</a></p>
-      </div>
-      <div class="film-card">
-        <div class="poster robofriend" aria-hidden="true"></div>
-        <h3>Robofriend</h3>
-        <p class="meta">Short - Director | Actor | Editor - 2026</p>
-        <p><a class="details-btn" href="robofriend.html">Watch</a></p>
-      </div>
-      <div class="film-card">
-        <div class="poster death-of-cinema" aria-hidden="true"></div>
-        <h3>The Death of Cinema</h3>
-        <p class="meta">Short - Director | Actor | Editor - 2026</p>
-        <p><a class="details-btn" href="death-of-cinema.html">Watch</a></p>
-      </div>
-      <div class="film-card">
-        <div class="poster missed" aria-hidden="true"></div>
-        <h3>Missed</h3>
-        <p class="meta">Short - Director | Actor | Editor - 2025</p>
-        <p><a class="details-btn" href="missed.html">Watch</a></p>
-      </div>
-      <div class="film-card">
-        <div class="poster anxiety" aria-hidden="true"></div>
-        <h3>Anxiety</h3>
-        <p class="meta">Short - Director | Actor | Editor - 2025</p>
-        <p><a class="details-btn" href="anxiety.html">Watch</a></p>
-      </div>
-      <div class="film-card">
-        <div class="poster echoes" aria-hidden="true"></div>
-        <h3>The Mask</h3>
-        <p class="meta">Short - Director | Actor | Editor - 2025</p>
-        <p><a class="details-btn" href="mask.html">Watch</a></p>
-      </div>
-      <div class="film-card">
-        <div class="poster college-day" aria-hidden="true"></div>
-        <h3>A College Day</h3>
-        <p class="meta">Short - Director | Actor | Editor - 2025</p>
-        <p><a class="details-btn" href="college-day.html">Watch</a></p>
-      </div>
-      <div class="film-card">
-        <div class="poster boiling-point" aria-hidden="true"></div>
-        <h3>The Boiling Point</h3>
-        <p class="meta">Short - Director | Actor | Editor - 2025</p>
-        <p><a class="details-btn" href="boiling-point.html">Watch</a></p>
-      </div>
-      <div class="film-card">
-        <div class="poster new-chapter" aria-hidden="true"></div>
-        <h3>The New Chapter</h3>
-        <p class="meta">Short - Director | Actor | Editor - 2025</p>
-        <p><a class="details-btn" href="new-chapter.html">Watch</a></p>
-      </div>
+
+    <div class="slider-counter">
+      <p><span>1</span><span>/</span><span>10</span></p>
     </div>
+
+    <div class="slider-items"></div>
+
+    <div class="slider-preview"></div>
   </div>
+
+  <footer>
+    <p>Films</p>
+  </footer>
+
+  <script>
+    window.filmSliderConfig = [
+      {
+        name: 'The Mental State',
+        img: 'The Mental State.png',
+        href: ''
+      },
+      {
+        name: 'The Tipping Point',
+        img: 'The Tipping Point.png',
+        href: ''
+      },
+      {
+        name: 'Robofriend',
+        img: 'robofriend.png',
+        href: ''
+      },
+      {
+        name: 'The Death of Cinema',
+        img: 'Death of cinema 1.png',
+        href: ''
+      },
+      {
+        name: 'Missed',
+        img: 'Missed.png',
+        href: 'missed.html'
+      },
+      {
+        name: 'Anxiety',
+        img: 'Anxiety.png',
+        href: 'anxiety.html'
+      },
+      {
+        name: 'The Mask',
+        img: 'The mask.png',
+        href: 'mask.html'
+      },
+      {
+        name: 'A College Day',
+        img: 'A College Day.png',
+        href: 'college-day.html'
+      },
+      {
+        name: 'The Boiling Point',
+        img: 'The Boiling Point.png',
+        href: 'boiling-point.html'
+      },
+      {
+        name: 'The New Chapter',
+        img: 'The New Chapter.png',
+        href: 'new-chapter.html'
+      }
+    ];
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/CustomEase.min.js"></script>
+  <script src="film_slider/script.js"></script>
 </body>
 </html>

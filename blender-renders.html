@@ -4,78 +4,374 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Blender Renders | Jeffkim Aminiel Kimo</title>
-  <link rel="icon" type="image/png" href="jklogo2.png">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/png" href="jklogo2.png" />
   <style>
-    body { padding: 36px 0 48px; }
-    .page-header { text-align: center; margin-bottom: 24px; }
-    .page-header h1 { color: #f6c344; letter-spacing: 0.01em; }
-    .back-link { color: #f6c344; text-decoration: none; font-weight: 700; }
-    .back-link:hover { text-decoration: underline; }
-    .renders-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
-    .render-card { background: rgba(13, 14, 20, 0.8); border: 1px solid rgba(255, 215, 128, 0.16); border-radius: 18px; padding: 14px; box-shadow: 0 25px 60px rgba(0,0,0,0.55); display: grid; gap: 10px; }
-    .render-card h3 { color: #f8f3e8; margin: 0; }
-    .render-card p { color: #c8c3b3; margin: 0; }
-    .renders-gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
-    .render-img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 12px; border: 1px solid rgba(255, 215, 128, 0.16); box-shadow: 0 10px 26px rgba(0,0,0,0.4); }
+    @import url("https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap");
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+      font-family: "DM Mono", monospace;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .back-link {
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      z-index: 20;
+      color: #f6c344;
+      text-decoration: none;
+      text-transform: uppercase;
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      border: 1px solid rgba(246, 195, 68, 0.5);
+      border-radius: 999px;
+      background: rgba(10, 11, 16, 0.74);
+      padding: 8px 12px;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .back-link:hover {
+      background: rgba(246, 195, 68, 0.16);
+      border-color: rgba(246, 195, 68, 0.9);
+    }
+
+    .page-label {
+      position: fixed;
+      top: 22px;
+      right: 18px;
+      z-index: 20;
+      color: rgba(255, 255, 255, 0.7);
+      text-transform: uppercase;
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+    }
+
+    .slider {
+      position: fixed;
+      width: 100vw;
+      height: 100svh;
+      overflow: hidden;
+      touch-action: none;
+    }
+
+    .slide {
+      position: absolute;
+      width: 45vw;
+      height: 100vh;
+      overflow: hidden;
+      will-change: transform;
+      contain: paint;
+      transform: translateZ(0);
+    }
+
+    .slide img {
+      will-change: transform;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+    }
+
+    .slide-title {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #fff;
+      text-align: center;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      font-weight: 500;
+      line-height: 1;
+      background-color: #000;
+      padding: 0.22rem 0.4rem;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .thumbnail-wheel {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .thumbnail-item {
+      position: absolute;
+      width: 35px;
+      height: 50px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      will-change: transform;
+      transform: translateZ(0);
+    }
+
+    @media (max-width: 1000px) {
+      .slide {
+        width: 75vw;
+      }
+
+      .thumbnail-item {
+        width: 20px;
+        height: 30px;
+      }
+
+      .page-label {
+        display: none;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="page-header">
-      <a class="back-link" href="portfolio.html?skipIntro=1">&#8592; Back to portfolio</a>
-      <h1>Blender Renders</h1>
-      <p class="eyebrow">Early project visuals</p>
-    </div>
+  <a class="back-link" href="portfolio.html?skipIntro=1">&#8592; Back to portfolio</a>
+  <p class="page-label">Blender Renders</p>
 
-    <div class="renders-grid">
-      <div class="render-card">
-        <div class="renders-gallery">
-          <img class="render-img" src="./1.png" alt="Blender render 1">
-          <img class="render-img" src="./2.png" alt="Blender render 2">
-          <img class="render-img" src="./3.png" alt="Blender render 3">
-          <img class="render-img" src="./4.png" alt="Blender render 4">
-          <img class="render-img" src="./5.png" alt="Blender render 5">
-          <img class="render-img" src="./6.png" alt="Blender render 6">
-          <img class="render-img" src="./7.png" alt="Blender render 7">
-          <img class="render-img" src="./8.png" alt="Blender render 8">
-          <img class="render-img" src="./9.png" alt="Blender render 9">
-          <img class="render-img" src="./10.png" alt="Blender render 10">
-          <img class="render-img" src="./11.png" alt="Blender render 11">
-          <img class="render-img" src="./12.png" alt="Blender render 12">
-          <img class="render-img" src="./13.png" alt="Blender render 13">
-          <img class="render-img" src="./14.png" alt="Blender render 14">
-          <img class="render-img" src="./15.png" alt="Blender render 15">
-          <img class="render-img" src="./16.png" alt="Blender render 16">
-          <img class="render-img" src="./17.png" alt="Blender render 17">
-          <img class="render-img" src="./18.png" alt="Blender render 18">
-          <img class="render-img" src="./19.png" alt="Blender render 19">
-          <img class="render-img" src="./20.png" alt="Blender render 20">
-          <img class="render-img" src="./21.png" alt="Blender render 21">
-          <img class="render-img" src="./22.png" alt="Blender render 22">
-          <img class="render-img" src="./23.png" alt="Blender render 23">
-          <img class="render-img" src="./24.png" alt="Blender render 24">
-          <img class="render-img" src="./25.png" alt="Blender render 25">
-          <img class="render-img" src="./26.png" alt="Blender render 26">
-          <img class="render-img" src="./27.png" alt="Blender render 27">
-          <img class="render-img" src="./28.png" alt="Blender render 28">
-          <img class="render-img" src="./29.png" alt="Blender render 29">
-          <img class="render-img" src="./30.png" alt="Blender render 30">
-          <img class="render-img" src="./31.png" alt="Blender render 31">
-          <img class="render-img" src="./32.png" alt="Blender render 32">
-          <img class="render-img" src="./33.png" alt="Blender render 33">
-          <img class="render-img" src="./34.png" alt="Blender render 34">
-          <img class="render-img" src="./35.png" alt="Blender render 35">
-          <img class="render-img" src="./36.png" alt="Blender render 36">
-          <img class="render-img" src="./37.png" alt="Blender render 37">
-          <img class="render-img" src="./38.png" alt="Blender render 38">
-          <img class="render-img" src="./39.png" alt="Blender render 39">
-        </div>
-        
-          
-        
-      </div>
-    </div>
+  <div class="slider">
+    <p class="slide-title">Render 01</p>
   </div>
+  <div class="thumbnail-wheel"></div>
+
+  <script>
+    (() => {
+      const slider = document.querySelector('.slider');
+      const slideTitle = document.querySelector('.slide-title');
+      const thumbnailWheel = document.querySelector('.thumbnail-wheel');
+
+      if (!slider || !slideTitle || !thumbnailWheel) {
+        return;
+      }
+
+      const TOTAL_RENDERS = 39;
+      const renders = Array.from({ length: TOTAL_RENDERS }, (_, index) => {
+        const id = index + 1;
+        return {
+          name: `Render ${String(id).padStart(2, '0')}`,
+          file: `${id}.png`
+        };
+      });
+
+      const totalSlides = renders.length;
+      let isMobile = window.innerWidth < 1000;
+      let slideWidth = isMobile ? window.innerWidth * 0.75 : window.innerWidth * 0.45;
+      let viewportCenter = window.innerWidth / 2;
+      let currentX = viewportCenter - slideWidth / 2;
+      let targetX = currentX;
+      let isPointerDown = false;
+      let pointerX = 0;
+      let thumbnailTick = 0;
+      let lastTitleIndex = -1;
+
+      const slides = [];
+      const slideImages = [];
+      const thumbnails = [];
+
+      const wrapValue = (value, max) => ((value % max) + max) % max;
+
+      const applyImageMeta = (img, item) => {
+        img.src = `./${item.file}`;
+        img.alt = `Blender ${item.name}`;
+      };
+
+      const createSlides = () => {
+        const fragment = document.createDocumentFragment();
+        renders.forEach((item, index) => {
+          const slide = document.createElement('div');
+          slide.className = 'slide';
+
+          const img = document.createElement('img');
+          applyImageMeta(img, item);
+          img.loading = index < 6 ? 'eager' : 'lazy';
+          img.decoding = 'async';
+          if (index === 0) {
+            img.fetchPriority = 'high';
+          }
+
+          slide.appendChild(img);
+          fragment.appendChild(slide);
+          slides.push(slide);
+          slideImages.push(img);
+        });
+        slider.appendChild(fragment);
+      };
+
+      const createThumbnailItems = () => {
+        thumbnailWheel.innerHTML = '';
+        thumbnails.length = 0;
+        const fragment = document.createDocumentFragment();
+
+        renders.forEach((item, index) => {
+          const thumbnail = document.createElement('div');
+          thumbnail.className = 'thumbnail-item';
+          thumbnail.dataset.baseAngle = String((index / totalSlides) * Math.PI * 2);
+
+          const img = document.createElement('img');
+          applyImageMeta(img, item);
+          img.loading = 'lazy';
+          img.decoding = 'async';
+
+          thumbnail.appendChild(img);
+          fragment.appendChild(thumbnail);
+          thumbnails.push(thumbnail);
+        });
+
+        thumbnailWheel.appendChild(fragment);
+      };
+
+      const setLayoutMetrics = () => {
+        isMobile = window.innerWidth < 1000;
+        slideWidth = isMobile ? window.innerWidth * 0.75 : window.innerWidth * 0.45;
+        viewportCenter = window.innerWidth / 2;
+        const centerOffset = viewportCenter - slideWidth / 2;
+        currentX = centerOffset;
+        targetX = centerOffset;
+
+        slides.forEach((slide) => {
+          slide.style.width = `${slideWidth}px`;
+        });
+      };
+
+      const updateThumbnails = () => {
+        const exactSlideProgress = Math.abs(currentX) / slideWidth;
+        const currentRotationAngle = -(exactSlideProgress * (360 / totalSlides)) + 90;
+        const radius = isMobile ? 150 : 350;
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2 - 25;
+
+        for (let i = 0; i < thumbnails.length; i += 1) {
+          const thumbnail = thumbnails[i];
+          const baseAngle = Number(thumbnail.dataset.baseAngle);
+          const angle = baseAngle + (currentRotationAngle * Math.PI) / 180;
+          const x = radius * Math.cos(angle) + centerX;
+          const y = radius * Math.sin(angle) + centerY;
+          thumbnail.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+        }
+      };
+
+      const animate = () => {
+        currentX += (targetX - currentX) * 0.1;
+        const totalWidth = totalSlides * slideWidth;
+
+        if (currentX > totalWidth) {
+          currentX -= totalWidth;
+          targetX -= totalWidth;
+        } else if (currentX < -totalWidth) {
+          currentX += totalWidth;
+          targetX += totalWidth;
+        }
+
+        const maxScale = isMobile ? 1.65 : 1.95;
+        const outerDistance = slideWidth * 2.4;
+        let centerSlideIndex = 0;
+        let closestDistance = Number.POSITIVE_INFINITY;
+
+        for (let i = 0; i < totalSlides; i += 1) {
+          const rawX = i * slideWidth + currentX;
+          let wrappedX = wrapValue(rawX, totalWidth);
+          if (wrappedX > totalWidth - slideWidth) {
+            wrappedX -= totalWidth;
+          }
+
+          const slide = slides[i];
+          slide.style.transform = `translate3d(${wrappedX}px, 0, 0)`;
+
+          const slideCenterX = wrappedX + slideWidth / 2;
+          const distanceFromCenter = Math.abs(slideCenterX - viewportCenter);
+          if (distanceFromCenter < closestDistance) {
+            closestDistance = distanceFromCenter;
+            centerSlideIndex = i;
+          }
+
+          const progress = Math.min(distanceFromCenter / outerDistance, 1);
+          const easedProgress =
+            progress < 0.5
+              ? 2 * progress * progress
+              : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+          const scale = 1 + easedProgress * (maxScale - 1);
+          slideImages[i].style.transform = `translateZ(0) scale(${scale.toFixed(3)})`;
+        }
+
+        if (centerSlideIndex !== lastTitleIndex) {
+          lastTitleIndex = centerSlideIndex;
+          slideTitle.textContent = renders[centerSlideIndex]?.name || 'Render';
+        }
+
+        thumbnailTick = (thumbnailTick + 1) % 2;
+        if (thumbnailTick === 0) {
+          updateThumbnails();
+        }
+
+        requestAnimationFrame(animate);
+      };
+
+      const handleWheel = (event) => {
+        event.preventDefault();
+        const delta = Math.max(-120, Math.min(120, event.deltaY || 0));
+        targetX -= delta * 0.85;
+      };
+
+      const getPointerClientX = (event) => {
+        if ('touches' in event && event.touches.length > 0) {
+          return event.touches[0].clientX;
+        }
+        if ('changedTouches' in event && event.changedTouches.length > 0) {
+          return event.changedTouches[0].clientX;
+        }
+        return event.clientX;
+      };
+
+      const startPointer = (event) => {
+        isPointerDown = true;
+        pointerX = getPointerClientX(event);
+      };
+
+      const movePointer = (event) => {
+        if (!isPointerDown) return;
+        const nextX = getPointerClientX(event);
+        const deltaX = nextX - pointerX;
+        pointerX = nextX;
+        targetX += deltaX * 1.25;
+      };
+
+      const endPointer = () => {
+        isPointerDown = false;
+      };
+
+      const onResize = () => {
+        setLayoutMetrics();
+        updateThumbnails();
+      };
+
+      createSlides();
+      createThumbnailItems();
+      setLayoutMetrics();
+      updateThumbnails();
+
+      window.addEventListener('wheel', handleWheel, { passive: false });
+      window.addEventListener('resize', onResize);
+      slider.addEventListener('pointerdown', startPointer);
+      window.addEventListener('pointermove', movePointer);
+      window.addEventListener('pointerup', endPointer);
+      window.addEventListener('pointercancel', endPointer);
+
+      animate();
+    })();
+  </script>
 </body>
 </html>

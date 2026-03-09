@@ -4,13 +4,19 @@
     yearEl.textContent = new Date().getFullYear();
   }
 
+  const introHeroOverlay = document.getElementById('intro-hero-overlay');
+  const introHeroFrame = document.getElementById('intro-hero-frame');
   const introOverlay = document.getElementById('intro-overlay');
-  const introVideo = document.getElementById('intro-video');
+  const introFrame = document.getElementById('intro-frame');
+  const introEnter = document.getElementById('intro-enter');
   const introTrigger = document.getElementById('intro-trigger');
 
-  if (introOverlay && introVideo) {
+  if (introOverlay || introHeroOverlay) {
     const url = new URL(window.location.href);
     const skipByParam = url.searchParams.has('skipIntro');
+    let heroFallbackTimer = null;
+    let heroLoaderCompleted = false;
+
     const isInternalReferrer = (() => {
       if (!document.referrer) return false;
       try {
@@ -26,64 +32,110 @@
       return false;
     })();
 
-    if (skipByParam || isInternalReferrer) {
-      document.body.classList.remove('intro-active');
-      introVideo.muted = true;
-      introVideo.pause();
-      introVideo.currentTime = 0;
-    }
-
-    const showStartPrompt = () => {
-      if (introOverlay.querySelector('.intro-start')) return;
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'intro-start';
-      button.textContent = 'Tap to start';
-      introOverlay.appendChild(button);
-      button.addEventListener('click', () => {
-        introVideo.muted = false;
-        const playAttempt = introVideo.play();
-        if (playAttempt && typeof playAttempt.catch === 'function') {
-          playAttempt.catch(() => {});
-        }
-        button.remove();
-      });
+    const hideOverlay = (overlay) => {
+      if (!overlay) return;
+      overlay.classList.add('is-hidden');
+      overlay.setAttribute('aria-hidden', 'true');
     };
 
-    const finishIntro = () => {
-      introOverlay.classList.add('is-hidden');
-      introOverlay.setAttribute('aria-hidden', 'true');
-      document.body.classList.remove('intro-active');
-      document.body.classList.add('intro-ended');
-      introVideo.pause();
+    const showOverlay = (overlay) => {
+      if (!overlay) return;
+      overlay.classList.remove('is-hidden');
+      overlay.setAttribute('aria-hidden', 'false');
     };
 
-    const startIntro = () => {
-      introOverlay.classList.remove('is-hidden');
-      introOverlay.setAttribute('aria-hidden', 'false');
-      document.body.classList.add('intro-active');
-      document.body.classList.remove('intro-ended');
-      introVideo.muted = false;
-      introVideo.currentTime = 0;
-      const attempt = introVideo.play();
-      if (attempt && typeof attempt.catch === 'function') {
-        attempt.catch(showStartPrompt);
+    const reloadFrame = (frame) => {
+      if (!frame) return;
+      const src = frame.getAttribute('src');
+      if (src) {
+        frame.setAttribute('src', src);
       }
     };
 
-    introVideo.addEventListener('ended', finishIntro);
-    introVideo.addEventListener('error', finishIntro);
-    introVideo.addEventListener('timeupdate', () => {
-      if (introVideo.currentTime >= 3.5) {
-        finishIntro();
+    const clearHeroFallback = () => {
+      if (!heroFallbackTimer) return;
+      window.clearTimeout(heroFallbackTimer);
+      heroFallbackTimer = null;
+    };
+
+    const isMessageFromFrame = (event, frame, messageType) => {
+      if (!frame || event.source !== frame.contentWindow) {
+        return false;
+      }
+      if (!event.data || event.data.type !== messageType) {
+        return false;
+      }
+      if (event.origin && event.origin !== 'null' && event.origin !== window.location.origin) {
+        return false;
+      }
+      return true;
+    };
+
+    const hideIntroEnter = () => {
+      if (!introEnter) return;
+      introEnter.classList.remove('is-visible');
+      introEnter.disabled = true;
+    };
+
+    const showIntroEnter = () => {
+      if (!introEnter) return;
+      introEnter.classList.add('is-visible');
+      introEnter.disabled = false;
+    };
+
+    const finishIntro = () => {
+      clearHeroFallback();
+      hideOverlay(introHeroOverlay);
+      hideOverlay(introOverlay);
+      document.body.classList.remove('intro-active');
+      document.body.classList.add('intro-ended');
+      hideIntroEnter();
+    };
+
+    const startIntro = () => {
+      clearHeroFallback();
+      hideOverlay(introHeroOverlay);
+      showOverlay(introOverlay);
+      document.body.classList.add('intro-active');
+      document.body.classList.remove('intro-ended');
+      hideIntroEnter();
+      reloadFrame(introFrame);
+    };
+
+    const finishHeroLoader = () => {
+      if (heroLoaderCompleted) return;
+      heroLoaderCompleted = true;
+      startIntro();
+    };
+
+    const startHeroLoader = () => {
+      heroLoaderCompleted = false;
+      document.body.classList.add('intro-active');
+      document.body.classList.remove('intro-ended');
+      hideIntroEnter();
+      showOverlay(introHeroOverlay);
+      hideOverlay(introOverlay);
+      reloadFrame(introHeroFrame);
+      clearHeroFallback();
+      heroFallbackTimer = window.setTimeout(() => {
+        finishHeroLoader();
+      }, 13000);
+    };
+
+    hideIntroEnter();
+
+    window.addEventListener('message', (event) => {
+      if (isMessageFromFrame(event, introHeroFrame, 'intro-hero-complete')) {
+        finishHeroLoader();
+        return;
+      }
+      if (isMessageFromFrame(event, introFrame, 'intro-scroll-end')) {
+        showIntroEnter();
       }
     });
 
     window.addEventListener('load', () => {
       if (skipByParam || isInternalReferrer) {
-        introVideo.muted = true;
-        introVideo.pause();
-        introVideo.currentTime = 0;
         finishIntro();
         if (skipByParam) {
           url.searchParams.delete('skipIntro');
@@ -92,9 +144,12 @@
         }
         return;
       }
-      introVideo.muted = false;
-      startIntro();
+      startHeroLoader();
     });
+
+    if (introEnter) {
+      introEnter.addEventListener('click', finishIntro);
+    }
 
     if (introTrigger) {
       introTrigger.addEventListener('click', () => {

@@ -4,57 +4,447 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Code Projects | Jeffkim Aminiel Kimo</title>
-  <link rel="icon" type="image/png" href="jklogo2.png">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/png" href="jklogo2.png" />
+  <link rel="stylesheet" href="code_slider/css/dev/app.css" />
   <style>
-    body { padding: 36px 0 48px; }
-    .page-header { text-align: center; margin-bottom: 24px; }
-    .page-header h1 { color: #f6c344; }
-    .back-link { color: #f6c344; text-decoration: none; font-weight: 700; }
-    .back-link:hover { text-decoration: underline; }
-    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    @media (max-width: 720px) {
-      .grid { grid-template-columns: minmax(0, 1fr); }
+    .container {
+      background:
+        radial-gradient(circle at 18% 15%, rgba(251, 64, 22, 0.16), transparent 34%),
+        radial-gradient(circle at 78% 85%, rgba(75, 129, 255, 0.12), transparent 38%),
+        linear-gradient(160deg, #090a0e, #050507 62%, #07080d);
+    }
+
+    .slider {
+      perspective: 1100px;
+      perspective-origin: 50% 82%;
+    }
+
+    .slide {
+      background:
+        radial-gradient(circle at 12% 14%, rgba(251, 64, 22, 0.22), transparent 46%),
+        linear-gradient(145deg, rgba(22, 22, 24, 0.94), rgba(8, 8, 10, 0.97));
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow: 0 24px 52px rgba(0, 0, 0, 0.52);
+      border-radius: 0.8rem;
+      width: min(62vw, 780px);
+      height: clamp(22rem, 56vh, 28rem);
+      top: 56%;
+      overflow: hidden;
+      transform-origin: 50% 95%;
+      will-change: transform, opacity, filter;
+    }
+
+    .slide::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(transparent 55%, rgba(0, 0, 0, 0.6)),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05), transparent 35%);
+      pointer-events: none;
+    }
+
+    .slide.is-active {
+      border-color: rgba(251, 64, 22, 0.5);
+      box-shadow:
+        0 34px 66px rgba(0, 0, 0, 0.58),
+        0 0 0 1px rgba(251, 64, 22, 0.22) inset;
+    }
+
+    .stack-hint {
+      position: fixed;
+      left: 50%;
+      bottom: 1.2rem;
+      transform: translateX(-50%);
+      z-index: 30;
+      padding: 0.46rem 0.74rem;
+      border-radius: 999px;
+      border: 1px solid rgba(251, 64, 22, 0.45);
+      background: rgba(8, 9, 14, 0.74);
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 0.66rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      pointer-events: none;
+      animation: hintPulse 1.8s ease-in-out infinite;
+      transition: opacity 0.28s ease, transform 0.28s ease;
+    }
+
+    .corner-github {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 30;
+      padding: 0.5rem 0.7rem;
+      border-radius: 0.45rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(10, 11, 16, 0.8);
+      color: #ffffff;
+      text-transform: uppercase;
+      font-size: 0.68rem;
+      letter-spacing: 0.07em;
+      text-decoration: none;
+      transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+    }
+
+    .corner-github:hover {
+      border-color: rgba(251, 64, 22, 0.7);
+      background: rgba(251, 64, 22, 0.2);
+      color: #fff;
+    }
+
+    .corner-back {
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      z-index: 30;
+      padding: 0.5rem 0.7rem;
+      border-radius: 0.45rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(10, 11, 16, 0.8);
+      color: #ffffff;
+      text-transform: uppercase;
+      font-size: 0.68rem;
+      letter-spacing: 0.07em;
+      text-decoration: none;
+      transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+    }
+
+    .corner-back:hover {
+      border-color: rgba(251, 64, 22, 0.7);
+      background: rgba(251, 64, 22, 0.2);
+      color: #fff;
+    }
+
+    body.has-interacted .stack-hint {
+      opacity: 0;
+      transform: translate(-50%, 10px);
+    }
+
+    @keyframes hintPulse {
+      0%, 100% { opacity: 0.55; }
+      50% { opacity: 1; }
+    }
+
+    .slide-content {
+      position: absolute;
+      left: 1.2rem;
+      right: 1.2rem;
+      top: 50%;
+      bottom: auto;
+      transform: translateY(-50%);
+      z-index: 2;
+      display: grid;
+      gap: 0.68rem;
+      align-content: center;
+      color: #fff;
+      padding: 0.9rem;
+      border-radius: 0.6rem;
+      background: linear-gradient(180deg, rgba(7, 7, 9, 0.22), rgba(7, 7, 9, 0.66));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(4px);
+    }
+
+    .slide-title {
+      position: static;
+      top: auto;
+      left: auto;
+      transform: none;
+      display: block;
+      width: auto;
+      padding: 0;
+      background: transparent;
+      text-align: left;
+      pointer-events: auto;
+      font-size: clamp(1.4rem, 2.8vw, 2.2rem);
+      letter-spacing: -0.04rem;
+      line-height: 1.05;
+      text-transform: none;
+    }
+
+    .slide-meta {
+      display: block;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: rgba(255, 255, 255, 0.74);
+    }
+
+    .slide-desc {
+      display: block;
+      font-size: 0.78rem;
+      line-height: 1.45;
+      text-transform: none;
+      color: rgba(255, 255, 255, 0.9);
+      max-width: 92%;
+    }
+
+    .slide-link {
+      display: inline-flex;
+      width: max-content;
+      padding: 0.45rem 0.65rem;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: #121212;
+      background: #f3f3f5;
+      border-radius: 0.25rem;
+      border: 1px solid rgba(255, 255, 255, 0.65);
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .slide-link:hover {
+      background: #fb4016;
+      color: #fff;
+    }
+
+    @media (max-width: 1000px) {
+      .slide {
+        width: 80%;
+        height: 22rem;
+        top: 58%;
+      }
+
+      .slide-content {
+        left: 0.9rem;
+        right: 0.9rem;
+      }
+
+      .slide-desc {
+        max-width: 100%;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="page-header">
-      <a class="back-link" href="portfolio.html?skipIntro=1">&#8592; Back to portfolio</a>
-      <h1>Code Projects</h1>
-      <p class="eyebrow">My Programming Haven</p>
-    </div>
-    <div class="grid">
-      <article class="card">
-        <h3>2048 Game</h3>
-        <p class="meta">Python &bull;</p>
-        <p class="desc">A console-based 2048 implementation with smooth merges, score tracking, and restart support. Built to be lightweight and easy to run locally.</p>
-        <p><a class="details-btn" href="https://github.com/jeffkimkimo/2048game" target="_blank" rel="noopener">View code</a></p>
-      </article>
-      <article class="card">
-        <h3>Portfolio Website</h3>
-        <p class="meta">HTML/CSS/JS &bull; Personal site</p>
-        <p class="desc">My portfolio site showcasing films, scripts, and code projects.</p>
-        <p><a class="details-btn" href="https://github.com/jeffkimkimo/myhaven" target="_blank" rel="noopener">View code</a></p>
-      </article>
-      <article class="card">
-        <h3>TotalSteps</h3>
-        <p class="meta">Swift, SwiftUI, Healthkit, Xcode&bull;</p>
-        <p class="desc">A minimalist step-tracking app built to answer one simple question: <strong>how many steps have you taken in your lifetime?</strong> Instead of focusing on daily goals, streaks, or fitness gamification, TotalSteps connects directly to <strong>Apple Health</strong> and reads your historical step data to calculate a <strong>true all-time total</strong>—from the very first day your iPhone or Apple Watch started recording steps up to today.</p>
-        <p><a class="details-btn" href="https://github.com/jeffkimkimo/TotalSteps" target="_blank" rel="noopener">View code</a></p>
-      </article>
-      <article class="card">
-        <h3>WhatLog</h3>
-        <p class="meta">Python, React, FastApi, HarperDB&bull;</p>
-        <p class="desc">WhatLog is a personal media logging application built as part of the What? project. It allows users to log movies and songs they have watched or listened to, without ratings or reviews.</p>
-        <p><a class="details-btn" href="https://github.com/jeffkimkimo/whatreview" target="_blank" rel="noopener">View code</a></p>
-      </article>
-    </div>
+  <div class="wrapper">
+    <main class="page">
+      <div data-anim-index="" class="index">
+        <div class="container">
+          <div id="code-project-slider" class="slider"></div>
+        </div>
+        <a class="corner-back" href="portfolio.html?skipIntro=1">Back to portfolio</a>
+        <a class="corner-github" href="https://github.com/jeffkimkimo" target="_blank" rel="noopener">Github profile</a>
+        <p class="stack-hint">Scroll to explore</p>
+      </div>
+    </main>
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/gsap.min.js"></script>
+  <script>
+    (() => {
+      const slider = document.getElementById('code-project-slider');
+      const container = document.querySelector('.container');
+
+      if (!slider || !container || typeof gsap === 'undefined') return;
+
+      const projects = [
+        {
+          title: '2048 Game',
+          meta: 'Python',
+          description: 'Console-based 2048 with score tracking and replay support.',
+          href: 'https://github.com/jeffkimkimo/2048game'
+        },
+        {
+          title: 'Portfolio Website',
+          meta: 'HTML / CSS / JavaScript',
+          description: 'Personal portfolio site for films, scripts, and code projects.',
+          href: 'https://github.com/jeffkimkimo/myhaven'
+        },
+        {
+          title: 'TotalSteps',
+          meta: 'Swift / SwiftUI / HealthKit',
+          description: 'iOS app that calculates your true all-time lifetime step count.',
+          href: 'https://github.com/jeffkimkimo/TotalSteps'
+        },
+        {
+          title: 'WhatLog',
+          meta: 'Python / React / FastAPI / HarperDB',
+          description: 'Media logging app for movies and songs without ratings or reviews.',
+          href: 'https://github.com/jeffkimkimo/whatreview'
+        }
+      ];
+
+      const visibleCount = Math.min(5, projects.length);
+      const slides = [];
+      let frontIndex = 0;
+      let isAnimating = false;
+      let wheelAccumulator = 0;
+      let wheelLocked = false;
+      let touchStartY = 0;
+      let touchStartX = 0;
+      const wheelThreshold = 70;
+      const slotYStep = 74;
+      const slotXStep = 16;
+      const slotZStep = 75;
+      const slotScaleStep = 0.055;
+      const slotRotateStep = 4.8;
+      const slotOpacityStep = 0.12;
+      const slotBlurStep = 0.42;
+
+      const wrapIndex = (index) => (index + projects.length) % projects.length;
+      const projectAt = (index) => projects[wrapIndex(index)];
+      const markUserInteracted = () => document.body.classList.add('has-interacted');
+
+      const createSlideElement = () => {
+        const slide = document.createElement('article');
+        slide.className = 'slide';
+        slide.innerHTML = `
+          <div class="slide-content">
+            <h1 class="slide-title"></h1>
+            <p class="slide-meta"></p>
+            <p class="slide-desc"></p>
+            <a class="slide-link" target="_blank" rel="noopener">View code</a>
+          </div>
+        `;
+        return slide;
+      };
+
+      const hydrateSlide = (slide, project) => {
+        const title = slide.querySelector('.slide-title');
+        const meta = slide.querySelector('.slide-meta');
+        const desc = slide.querySelector('.slide-desc');
+        const link = slide.querySelector('.slide-link');
+
+        if (!title || !meta || !desc || !link) return;
+
+        title.textContent = project.title;
+        meta.textContent = project.meta;
+        desc.textContent = project.description;
+        link.href = project.href;
+      };
+
+      const targetStateForSlot = (slot) => ({
+        xPercent: -50,
+        yPercent: -50,
+        x: (slot % 2 === 0 ? -1 : 1) * slot * slotXStep,
+        y: -(slot * slotYStep),
+        z: -(slot * slotZStep),
+        scale: Math.max(0.78, 1 - (slot * slotScaleStep)),
+        rotationX: slot * slotRotateStep,
+        rotationZ: (slot % 2 === 0 ? -1 : 1) * slot * 0.9,
+        opacity: Math.max(0.42, 1 - (slot * slotOpacityStep)),
+        filter: `blur(${Math.min(3, slot * slotBlurStep).toFixed(2)}px)`
+      });
+
+      const animateStack = () => {
+        slides.forEach((slide, slot) => {
+          slide.classList.toggle('is-active', slot === 0);
+          slide.style.pointerEvents = slot === 0 ? 'auto' : 'none';
+          slide.style.zIndex = String(visibleCount - slot);
+          gsap.to(slide, {
+            ...targetStateForSlot(slot),
+            duration: 0.88,
+            ease: 'expo.out',
+            overwrite: true
+          });
+        });
+
+        gsap.delayedCall(0.9, () => {
+          isAnimating = false;
+        });
+      };
+
+      const initializeSlider = () => {
+        for (let slot = 0; slot < visibleCount; slot += 1) {
+          const slide = createSlideElement();
+          hydrateSlide(slide, projectAt(frontIndex + slot));
+          slide.style.zIndex = String(visibleCount - slot);
+          slider.appendChild(slide);
+          slides.push(slide);
+          gsap.set(slide, targetStateForSlot(slot));
+        }
+      };
+
+      const scrollDown = () => {
+        if (isAnimating) return;
+        isAnimating = true;
+        frontIndex = wrapIndex(frontIndex + 1);
+
+        const recycled = slides.shift();
+        hydrateSlide(recycled, projectAt(frontIndex + visibleCount - 1));
+        gsap.set(recycled, {
+          ...targetStateForSlot(visibleCount),
+          y: -(visibleCount * slotYStep) - 40,
+          opacity: 0
+        });
+        slides.push(recycled);
+
+        animateStack();
+      };
+
+      const scrollUp = () => {
+        if (isAnimating) return;
+        isAnimating = true;
+        frontIndex = wrapIndex(frontIndex - 1);
+
+        const recycled = slides.pop();
+        hydrateSlide(recycled, projectAt(frontIndex));
+        gsap.set(recycled, {
+          xPercent: -50,
+          yPercent: -50,
+          y: 70,
+          z: 90,
+          scale: 1.08,
+          rotationX: -6,
+          filter: 'blur(2px)',
+          opacity: 0
+        });
+        slides.unshift(recycled);
+
+        animateStack();
+      };
+
+      const handleDirection = (direction) => {
+        markUserInteracted();
+        if (direction === 'down') {
+          scrollDown();
+          return;
+        }
+        scrollUp();
+      };
+
+      container.addEventListener('wheel', (event) => {
+        event.preventDefault();
+        if (wheelLocked || isAnimating) return;
+
+        wheelAccumulator += Math.abs(event.deltaY);
+        if (wheelAccumulator < wheelThreshold) return;
+
+        wheelAccumulator = 0;
+        wheelLocked = true;
+        handleDirection(event.deltaY > 0 ? 'up' : 'down');
+        window.setTimeout(() => {
+          wheelLocked = false;
+        }, 520);
+      }, { passive: false });
+
+      container.addEventListener('touchstart', (event) => {
+        if (isAnimating || !event.touches[0]) return;
+        touchStartY = event.touches[0].clientY;
+        touchStartX = event.touches[0].clientX;
+      }, { passive: true });
+
+      container.addEventListener('touchend', (event) => {
+        if (isAnimating || !event.changedTouches[0]) return;
+
+        const deltaY = touchStartY - event.changedTouches[0].clientY;
+        const deltaX = Math.abs(touchStartX - event.changedTouches[0].clientX);
+        if (Math.abs(deltaY) < 45 || Math.abs(deltaY) < deltaX) return;
+        handleDirection(deltaY > 0 ? 'up' : 'down');
+      }, { passive: true });
+
+      window.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowDown') {
+          handleDirection('up');
+        } else if (event.key === 'ArrowUp') {
+          handleDirection('down');
+        }
+      });
+
+      initializeSlider();
+    })();
+  </script>
 </body>
 </html>
-
-
-
-

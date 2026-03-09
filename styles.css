@@ -42,6 +42,10 @@ body.intro-active .site-footer {
   transition: opacity 0.5s ease;
 }
 
+body.intro-active {
+  overflow: hidden;
+}
+
 body.intro-ended main {
   animation: introRevealWipe 0.85s cubic-bezier(0.2, 0.9, 0.2, 1) forwards;
 }
@@ -56,16 +60,18 @@ body.intro-ended .site-footer {
 }
 
 body.intro-active .intro-overlay {
-  display: grid;
+  display: flex;
 }
 
 .intro-overlay {
   position: fixed;
   inset: 0;
   background: #050507;
-  place-items: center;
+  align-items: center;
+  justify-content: center;
   z-index: 100;
   transition: opacity 0.5s ease;
+  padding: 0;
 }
 
 .intro-overlay.is-hidden {
@@ -73,28 +79,85 @@ body.intro-active .intro-overlay {
   pointer-events: none;
 }
 
-.intro-video {
+.intro-overlay-inner {
   width: 100vw;
   height: 100vh;
-  object-fit: cover;
   border-radius: 0;
+  border: 0;
   box-shadow: none;
+  overflow: hidden;
+  position: relative;
+  background: #0f0f0f;
 }
 
-.intro-start {
+.intro-frame {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  background: #0f0f0f;
+}
+
+.intro-hero-overlay {
+  z-index: 110;
+}
+
+.intro-hero-frame {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  background: #0f0f0f;
+}
+
+.intro-note {
   position: absolute;
-  bottom: 32px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 12px 20px;
+  left: 16px;
+  bottom: 16px;
+  margin: 0;
+  padding: 9px 12px;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   border-radius: 999px;
-  border: 1px solid rgba(255, 215, 128, 0.4);
+  border: 1px solid rgba(255, 215, 128, 0.3);
   background: rgba(13, 14, 20, 0.75);
+  color: #e7ddc3;
+  z-index: 2;
+}
+
+.intro-enter {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 215, 128, 0.5);
+  background: rgba(13, 14, 20, 0.85);
   color: var(--gold);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   cursor: pointer;
+  z-index: 2;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(8px);
+  transition: opacity 0.22s ease, visibility 0.22s ease, transform 0.22s ease, background 0.18s ease, border-color 0.18s ease;
+}
+
+.intro-enter.is-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.intro-enter:hover {
+  transform: translateY(-2px);
+  background: rgba(246, 195, 68, 0.12);
+  border-color: rgba(246, 195, 68, 0.85);
 }
 
 @keyframes introRevealWipe {
@@ -488,4 +551,22 @@ p { margin: 0; color: var(--muted); }
   }
   .hero { padding-top: 40px; }
   .hero-content .lede { font-size: 1rem; }
+  .intro-overlay {
+    padding: 0;
+  }
+  .intro-overlay-inner {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+  }
+  .intro-note {
+    max-width: calc(100% - 24px);
+    font-size: 0.7rem;
+  }
+  .intro-enter {
+    right: 12px;
+    bottom: 12px;
+    padding: 8px 12px;
+    font-size: 0.72rem;
+  }
 }

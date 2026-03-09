@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <title>Component Demo</title>
+
+   <!-- Connected Styles -->
+   <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+   <!-- ===== HTML ===== -->
+   <div class="index">
+      <div class="menu-toggle-btn">
+         <div class="hamburger-bar"></div>
+         <div class="hamburger-bar"></div>
+      </div>
+      <div class="menu-overlay">
+         <div class="menu-bg"></div>
+         <div class="menu-overlay-nav">
+            <div class="close-btn">
+               <div class="close-btn-bar"></div>
+               <div class="close-btn-bar"></div>
+            </div>
+            <div class="menu-overlay-items">
+               <a href="#">
+                  <ion-icon name="logo-google"></ion-icon>
+               </a>
+               <a href="#">
+                  <ion-icon name="logo-github"></ion-icon>
+               </a>
+               <a href="">
+                  <ion-icon name="logo-vercel"></ion-icon>
+               </a>
+            </div>
+         </div>
+         <div class="circular-menu">
+            <div class="joystick">
+               <ion-icon name="grid-sharp" class="center-icon center-main"></ion-icon>
+               <ion-icon name="chevron-up-sharp" class="center-icon center-up"></ion-icon>
+               <ion-icon name="chevron-down-sharp" class="center-icon center-down"></ion-icon>
+               <ion-icon name="chevron-back-sharp" class="center-icon center-left"></ion-icon>
+               <ion-icon name="chevron-forward-sharp" class="center-icon center-right"></ion-icon>
+            </div>
+         </div>
+      </div>
+   </div>
+   <!-- ======================= -->
+
+   <!-- Connected libs -->
+   <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/gsap.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/ScrollTrigger.min.js"></script>
+
+   <!-- Connected script -->
+   <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <title>Component Demo</title>
+
+   <!-- Connected Styles -->
+   <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+   <!-- ===== HTML ===== -->
+   <div class="index">
+      <a class="back-link" href="../portfolio.html?skipIntro=1">&larr; Back to portfolio</a>
+      <div class="stage">
+         <div class="text-block" data-radius="110" data-duration="1.2" data-speed="0.5" data-scramble-chars=".:"
+            data-max-fps="30">
+            <p>
+               I'm Jeffkim Kimo, a Computer Science student at Alfred University with a strong passion for building
+               technology and understanding how things work from the ground up. Even though I'm still early in my
+               journey, I'm driven by a real hunger to learn, experiment, and develop my skills. I enjoy creating
+               software projects, exploring new tools, and challenging myself to solve problems through code. What
+               defines me is not experience but curiosity, discipline, and the mindset to grow a little more every
+               day. My goal is to keep pushing forward, learning continuously, and building meaningful technology that
+               makes an impact.
+            </p>
+         </div>
+      </div>
+      <section class="picture-section" aria-label="Portrait display">
+         <iframe
+            class="picture-frame"
+            src="../picture_display/index.html"
+            title="Picture display"
+            loading="lazy"
+         ></iframe>
+      </section>
+   </div>
+   <!-- ======================= -->
+
+   <!-- Connected libs -->
+   <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/gsap.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/ScrollTrigger.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/ScrambleTextPlugin.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/SplitText.min.js"></script>
+   <!-- Connected script -->
+   <script src="script.js"></script>
+</body>
+
+</html>
