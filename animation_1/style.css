@@ -15,9 +15,6 @@
 
 body {
   font-family: "Instrument Serif", sans-serif;
-  overflow-x: hidden;
-  overscroll-behavior-y: contain;
-  -webkit-overflow-scrolling: touch;
 }
 
 img {

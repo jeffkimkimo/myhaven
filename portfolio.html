@@ -131,7 +131,6 @@
       border: 0;
       display: block;
       background: #0f0f0f;
-      pointer-events: auto;
     }
 
     .intro-overlay-inner {
@@ -140,8 +139,6 @@
       height: 100vh;
       overflow: hidden;
       background: #0f0f0f;
-      touch-action: pan-y;
-      overscroll-behavior: contain;
     }
 
     .intro-note {
@@ -325,9 +322,7 @@
       let shaderLoaded = false;
       let shaderActivationRequested = false;
       let introCompleted = false;
-      let introScrollWatcher = null;
       let introEnterFallbackTimer = null;
-      let introTouchY = null;
       const INTRO_ENTER_FAILSAFE_MS = 18000;
 
       if (!introHeroOverlay || !introOverlay || !introFrame || !introHeroFrame) {
@@ -355,12 +350,6 @@
         if (!heroFallbackTimer) return;
         window.clearTimeout(heroFallbackTimer);
         heroFallbackTimer = null;
-      };
-
-      const clearIntroScrollWatcher = () => {
-        if (!introScrollWatcher) return;
-        window.clearInterval(introScrollWatcher);
-        introScrollWatcher = null;
       };
 
       const clearIntroEnterFallback = () => {
@@ -399,60 +388,6 @@
         clearIntroEnterFallback();
       };
 
-      const getIntroFrameWindow = () => {
-        if (!introFrame || !introFrame.contentWindow) return null;
-        return introFrame.contentWindow;
-      };
-
-      const getIntroScrollMetrics = () => {
-        const introWindow = getIntroFrameWindow();
-        if (!introWindow) return null;
-
-        try {
-          const introDoc = introWindow.document.documentElement;
-          const introBody = introWindow.document.body;
-          const scrollTop =
-            introWindow.scrollY ||
-            introDoc.scrollTop ||
-            (introBody ? introBody.scrollTop : 0) ||
-            0;
-          const viewportHeight = introWindow.innerHeight || introDoc.clientHeight || 0;
-          const scrollHeight = Math.max(
-            introDoc.scrollHeight,
-            introBody ? introBody.scrollHeight : 0,
-            introDoc.offsetHeight,
-            introBody ? introBody.offsetHeight : 0,
-            introDoc.clientHeight
-          );
-
-          return { scrollTop, viewportHeight, scrollHeight };
-        } catch (error) {
-          return null;
-        }
-      };
-
-      const hasReachedIntroScrollEnd = () => {
-        const metrics = getIntroScrollMetrics();
-        if (!metrics) return false;
-        if (metrics.scrollHeight <= metrics.viewportHeight + 2) return true;
-        return metrics.scrollTop + metrics.viewportHeight >= metrics.scrollHeight - 24;
-      };
-
-      const syncIntroEnterFromScroll = () => {
-        if (introCompleted || introOverlay.classList.contains('is-hidden')) {
-          return;
-        }
-        if (hasReachedIntroScrollEnd()) {
-          showIntroEnter();
-        }
-      };
-
-      const startIntroScrollWatcher = () => {
-        clearIntroScrollWatcher();
-        introScrollWatcher = window.setInterval(syncIntroEnterFromScroll, 180);
-        syncIntroEnterFromScroll();
-      };
-
       const startIntroEnterFallback = () => {
         clearIntroEnterFallback();
         introEnterFallbackTimer = window.setTimeout(() => {
@@ -460,52 +395,6 @@
             showIntroEnter();
           }
         }, INTRO_ENTER_FAILSAFE_MS);
-      };
-
-      const forwardIntroScroll = (deltaY) => {
-        if (!deltaY || Number.isNaN(deltaY)) return;
-
-        const introWindow = getIntroFrameWindow();
-        if (!introWindow) return;
-
-        try {
-          introWindow.scrollBy(0, deltaY);
-        } catch (error) {
-          return;
-        }
-
-        syncIntroEnterFromScroll();
-      };
-
-      const handleIntroWheel = (event) => {
-        if (introCompleted || introOverlay.classList.contains('is-hidden')) return;
-        if (Math.abs(event.deltaY) < 0.5) return;
-        forwardIntroScroll(event.deltaY);
-        event.preventDefault();
-      };
-
-      const handleIntroTouchStart = (event) => {
-        if (introCompleted || introOverlay.classList.contains('is-hidden')) return;
-        if (!event.touches || event.touches.length !== 1) return;
-        introTouchY = event.touches[0].clientY;
-      };
-
-      const handleIntroTouchMove = (event) => {
-        if (introCompleted || introOverlay.classList.contains('is-hidden')) return;
-        if (introTouchY === null || !event.touches || event.touches.length !== 1) return;
-
-        const currentY = event.touches[0].clientY;
-        const deltaY = introTouchY - currentY;
-
-        if (Math.abs(deltaY) < 0.8) return;
-
-        forwardIntroScroll(deltaY);
-        introTouchY = currentY;
-        event.preventDefault();
-      };
-
-      const handleIntroTouchEnd = () => {
-        introTouchY = null;
       };
 
       const primeMenuShader = () => {
@@ -533,9 +422,7 @@
         }
         introCompleted = true;
         clearHeroFallback();
-        clearIntroScrollWatcher();
         clearIntroEnterFallback();
-        introTouchY = null;
         hideOverlay(introHeroOverlay);
         hideOverlay(introOverlay);
         hideIntroEnter();
@@ -556,7 +443,6 @@
         hideIntroEnter();
         primeMenuShader();
         reloadFrame(introFrame);
-        startIntroScrollWatcher();
         startIntroEnterFallback();
       };
 
@@ -569,9 +455,7 @@
         document.body.classList.add('intro-active');
         document.body.classList.remove('intro-ended');
         hideIntroEnter();
-        clearIntroScrollWatcher();
         clearIntroEnterFallback();
-        introTouchY = null;
         primeMenuShader();
         reloadFrame(introHeroFrame);
         clearHeroFallback();
@@ -609,15 +493,6 @@
       if (introEnter) {
         introEnter.addEventListener('click', finishIntro);
       }
-
-      introOverlay.addEventListener('wheel', handleIntroWheel, { passive: false });
-      introOverlay.addEventListener('touchstart', handleIntroTouchStart, { passive: true });
-      introOverlay.addEventListener('touchmove', handleIntroTouchMove, { passive: false });
-      introOverlay.addEventListener('touchend', handleIntroTouchEnd, { passive: true });
-      introOverlay.addEventListener('touchcancel', handleIntroTouchEnd, { passive: true });
-      introFrame.addEventListener('load', () => {
-        syncIntroEnterFromScroll();
-      });
 
       if (shaderFrame) {
         shaderFrame.addEventListener('load', () => {
