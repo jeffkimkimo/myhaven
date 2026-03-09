@@ -29,6 +29,7 @@ function createTextPressure(
 		flex = true,
 		scale = false,
 		minFontSize = 36,
+		maxFontSize = Number.POSITIVE_INFINITY,
 	} = {},
 ) {
 	const text = el.dataset.text || ''
@@ -63,6 +64,7 @@ function createTextPressure(
 		const r = el.getBoundingClientRect()
 		let fs = r.width / (chars.length / 2)
 		fs = Math.max(fs, minFontSize)
+		fs = Math.min(fs, maxFontSize)
 		title.style.fontSize = `${fs}px`
 		title.style.transform = 'scale(1,1)'
 
@@ -135,4 +137,15 @@ function createTextPressure(
 	return () => cancelAnimationFrame(raf)
 }
 
-createTextPressure(document.querySelector('#pressure'))
+const namePressure = document.querySelector('#pressure')
+if (namePressure) {
+	createTextPressure(namePressure)
+}
+
+const subtitlePressure = document.querySelector('#pressure-subtitle')
+if (subtitlePressure) {
+	createTextPressure(subtitlePressure, {
+		minFontSize: 18,
+		maxFontSize: 24,
+	})
+}
