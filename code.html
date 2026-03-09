@@ -12,6 +12,7 @@
         radial-gradient(circle at 18% 15%, rgba(251, 64, 22, 0.16), transparent 34%),
         radial-gradient(circle at 78% 85%, rgba(75, 129, 255, 0.12), transparent 38%),
         linear-gradient(160deg, #090a0e, #050507 62%, #07080d);
+      touch-action: none;
     }
 
     .slider {
@@ -274,7 +275,12 @@
       let wheelLocked = false;
       let touchStartY = 0;
       let touchStartX = 0;
+      let touchLastY = 0;
+      let touchLastX = 0;
+      let touchAccumulator = 0;
+      let touchAxisLock = '';
       const wheelThreshold = 70;
+      const touchThreshold = 42;
       const slotYStep = 74;
       const slotXStep = 16;
       const slotZStep = 75;
@@ -424,6 +430,33 @@
         if (isAnimating || !event.touches[0]) return;
         touchStartY = event.touches[0].clientY;
         touchStartX = event.touches[0].clientX;
+        touchLastY = touchStartY;
+        touchLastX = touchStartX;
+        touchAccumulator = 0;
+        touchAxisLock = '';
+      }, { passive: true });
+
+      container.addEventListener('touchmove', (event) => {
+        if (isAnimating || !event.touches[0]) return;
+
+        const nextY = event.touches[0].clientY;
+        const nextX = event.touches[0].clientX;
+        const deltaY = touchLastY - nextY;
+        const deltaX = touchLastX - nextX;
+        touchLastY = nextY;
+        touchLastX = nextX;
+
+        if (!touchAxisLock) {
+          touchAxisLock = Math.abs(deltaY) >= Math.abs(deltaX) ? 'y' : 'x';
+        }
+
+        if (touchAxisLock !== 'y') return;
+
+        touchAccumulator += deltaY;
+        if (Math.abs(touchAccumulator) < touchThreshold) return;
+
+        handleDirection(touchAccumulator > 0 ? 'up' : 'down');
+        touchAccumulator = 0;
       }, { passive: true });
 
       container.addEventListener('touchend', (event) => {

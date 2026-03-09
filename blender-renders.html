@@ -175,6 +175,7 @@
       let targetX = currentX;
       let isPointerDown = false;
       let pointerX = 0;
+      let pointerY = 0;
       let thumbnailTick = 0;
       let lastTitleIndex = -1;
 
@@ -339,13 +340,35 @@
       const startPointer = (event) => {
         isPointerDown = true;
         pointerX = getPointerClientX(event);
+        if ('touches' in event && event.touches.length > 0) {
+          pointerY = event.touches[0].clientY;
+        } else if ('changedTouches' in event && event.changedTouches.length > 0) {
+          pointerY = event.changedTouches[0].clientY;
+        } else {
+          pointerY = event.clientY;
+        }
       };
 
       const movePointer = (event) => {
         if (!isPointerDown) return;
         const nextX = getPointerClientX(event);
         const deltaX = nextX - pointerX;
+        let nextY = 0;
+        if ('touches' in event && event.touches.length > 0) {
+          nextY = event.touches[0].clientY;
+        } else if ('changedTouches' in event && event.changedTouches.length > 0) {
+          nextY = event.changedTouches[0].clientY;
+        } else {
+          nextY = event.clientY;
+        }
+        const deltaY = nextY - pointerY;
         pointerX = nextX;
+        pointerY = nextY;
+
+        if (Math.abs(deltaY) > Math.abs(deltaX)) {
+          targetX -= deltaY * 1.15;
+          return;
+        }
         targetX += deltaX * 1.25;
       };
 
