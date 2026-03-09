@@ -1,32 +1,180 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Resume | Jeffkim Aminiel Kimo</title>
-  <link rel="icon" type="image/png" href="../assets/branding/jklogo2.png">
-  <link rel="stylesheet" href="../styles.css">
+  <link rel="icon" type="image/png" href="../assets/branding/jklogo2.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
-    body { margin: 0; background: #050507; color: #f8f3e8; }
-    .wrap { width: min(1200px, 94vw); margin: 0 auto; padding: 28px 0 40px; }
-    .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    .topbar a { color: #f6c344; text-decoration: none; font-weight: 700; }
-    .topbar a:hover { text-decoration: underline; }
-    .note { margin: 0 0 16px; color: #c8c3b3; }
-    .viewer { border: 1px solid rgba(255, 215, 128, 0.2); border-radius: 14px; overflow: hidden; box-shadow: 0 25px 60px rgba(0,0,0,0.55); background: #0b0c12; }
-    .viewer iframe { width: 100%; height: 80vh; border: 0; }
-    @media print { body { display: none !important; } }
+    :root {
+      --bg-1: #030615;
+      --bg-2: #040b1f;
+      --ink: #e8f7ff;
+      --ink-soft: rgba(232, 247, 255, 0.72);
+      --line: rgba(145, 219, 255, 0.28);
+      --line-strong: rgba(145, 219, 255, 0.58);
+      --panel: rgba(8, 16, 34, 0.72);
+      --panel-strong: rgba(8, 20, 45, 0.88);
+      --accent: #7ad5ff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+    }
+
+    body {
+      font-family: "Host Grotesk", system-ui, -apple-system, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(75rem 50rem at 50% 45%, rgba(51, 199, 255, 0.2), transparent 60%),
+        radial-gradient(56rem 44rem at 55% 55%, rgba(0, 120, 255, 0.16), transparent 62%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(90% 52% at 50% 100%, rgba(255, 255, 255, 0.06), transparent 60%),
+        radial-gradient(120% 68% at 50% 112%, rgba(121, 194, 255, 0.2), transparent 50%);
+      mix-blend-mode: screen;
+      z-index: 0;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      width: min(1220px, 94vw);
+      margin: 0 auto;
+      padding: 28px 0 34px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 38px;
+      padding: 10px 16px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      text-decoration: none;
+      color: var(--ink);
+      background: rgba(6, 15, 30, 0.52);
+      backdrop-filter: blur(6px);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+    }
+
+    .pill:hover {
+      transform: translateY(-1px);
+      border-color: var(--line-strong);
+      background: rgba(18, 40, 75, 0.62);
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .viewer-shell {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 10px;
+      background: linear-gradient(160deg, var(--panel) 0%, var(--panel-strong) 100%);
+      backdrop-filter: blur(8px);
+      box-shadow:
+        0 24px 60px rgba(0, 0, 0, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    }
+
+    .viewer {
+      overflow: hidden;
+      border-radius: 12px;
+      border: 1px solid rgba(145, 219, 255, 0.2);
+      background: rgba(2, 6, 16, 0.72);
+      min-height: 70vh;
+    }
+
+    .viewer iframe {
+      width: 100%;
+      height: 80vh;
+      border: 0;
+      display: block;
+      background: #0a1224;
+    }
+
+    @media (max-width: 760px) {
+      .page {
+        padding: 18px 0 24px;
+      }
+
+      .topbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .actions {
+        justify-content: flex-start;
+      }
+
+      .pill {
+        font-size: 0.66rem;
+        min-height: 34px;
+        padding: 8px 13px;
+      }
+
+      .viewer {
+        min-height: 62vh;
+      }
+
+      .viewer iframe {
+        height: 72vh;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="topbar">
-      <a href="../portfolio.html?skipIntro=1">← Back to portfolio</a>
-    </div>
-    
-    <div class="viewer">
-      <iframe src="../assets/docs/Jeffkim%20Official%20Resume.pdf" title="Jeffkim Aminiel Kimo resume"></iframe>
-    </div>
-  </div>
+  <main class="page">
+    <header class="topbar">
+      <a class="pill" href="../portfolio.html?skipIntro=1">Back To Portfolio</a>
+      <div class="actions">
+        <a class="pill" href="../assets/docs/Jeffkim%20Official%20Resume.pdf" target="_blank" rel="noopener">Open PDF</a>
+      </div>
+    </header>
+
+    <section class="viewer-shell" aria-label="Resume viewer">
+      <div class="viewer">
+        <iframe src="../assets/docs/Jeffkim%20Official%20Resume.pdf" title="Jeffkim Aminiel Kimo resume"></iframe>
+      </div>
+    </section>
+  </main>
 </body>
 </html>
