@@ -2,11 +2,20 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Blender Renders | Jeffkim Aminiel Kimo</title>
   <link rel="icon" type="image/png" href="../assets/branding/jklogo2.png" />
   <style>
-    @import url("https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap");
+    @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap");
+
+    :root {
+      --bg: #060606;
+      --text: #efefea;
+      --muted: #afafac;
+      --chip-bg: rgba(239, 239, 234, 0.95);
+      --chip-text: #171717;
+      --card-border: rgba(255, 255, 255, 0.18);
+    }
 
     * {
       margin: 0;
@@ -19,380 +28,609 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background: #000;
-      font-family: "DM Mono", monospace;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: "Space Grotesk", sans-serif;
     }
 
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      backface-visibility: hidden;
+      transform: translateZ(0);
+    }
+
+    a,
+    p {
+      text-decoration: none;
+      color: var(--text);
+      line-height: 1;
+      letter-spacing: 0.02em;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+    }
+
+    nav,
+    footer {
+      position: fixed;
+      left: 0;
+      width: 100%;
+      padding: 1rem clamp(1rem, 2vw, 2rem);
+      display: flex;
+      align-items: center;
+      z-index: 30;
+    }
+
+    nav {
+      top: 0;
+      justify-content: space-between;
+      pointer-events: none;
+    }
+
+    nav > * {
+      pointer-events: auto;
+    }
+
+    footer {
+      bottom: 0;
+      justify-content: center;
+      pointer-events: none;
     }
 
     .back-link {
-      position: fixed;
-      top: 18px;
-      left: 18px;
-      z-index: 20;
-      color: #f6c344;
-      text-decoration: none;
-      text-transform: uppercase;
-      font-size: 0.72rem;
-      letter-spacing: 0.06em;
-      border: 1px solid rgba(246, 195, 68, 0.5);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
       border-radius: 999px;
-      background: rgba(10, 11, 16, 0.74);
-      padding: 8px 12px;
-      transition: background 0.2s ease, border-color 0.2s ease;
+      padding: 0.62rem 0.95rem;
+      background: var(--chip-bg);
+      color: var(--chip-text);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      letter-spacing: 0.08em;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      white-space: nowrap;
     }
 
     .back-link:hover {
-      background: rgba(246, 195, 68, 0.16);
-      border-color: rgba(246, 195, 68, 0.9);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
     }
 
     .page-label {
-      position: fixed;
-      top: 22px;
-      right: 18px;
-      z-index: 20;
-      color: rgba(255, 255, 255, 0.7);
-      text-transform: uppercase;
-      font-size: 0.68rem;
-      letter-spacing: 0.08em;
+      color: rgba(239, 239, 234, 0.7);
+      letter-spacing: 0.11em;
+      white-space: nowrap;
     }
 
-    .slider {
-      position: fixed;
+    .container {
+      position: relative;
       width: 100vw;
       height: 100svh;
       overflow: hidden;
+    }
+
+    .gallery-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transform-style: preserve-3d;
+      perspective: 2000px;
+      will-change: transform;
       touch-action: none;
     }
 
-    .slide {
+    .gallery {
+      position: relative;
+      width: min(70vw, 640px);
+      height: min(70vw, 640px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transform-origin: center;
+      will-change: transform;
+    }
+
+    .card {
       position: absolute;
-      width: 45vw;
-      height: 100vh;
+      width: clamp(42px, 4.1vw, 56px);
+      height: clamp(58px, 5.8vw, 76px);
+      border-radius: 5px;
+      transform-origin: center;
+      will-change: transform;
+      transform-style: preserve-3d;
       overflow: hidden;
-      will-change: transform;
-      contain: paint;
-      transform: translateZ(0);
+      border: 1px solid var(--card-border);
+      background: #0d0d0d;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
     }
 
-    .slide img {
-      will-change: transform;
-      transform: translateZ(0);
-      backface-visibility: hidden;
-    }
-
-    .slide-title {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: #fff;
-      text-align: center;
-      text-transform: uppercase;
-      font-size: 0.8rem;
-      font-weight: 500;
-      line-height: 1;
-      background-color: #000;
-      padding: 0.22rem 0.4rem;
-      pointer-events: none;
-      z-index: 3;
-    }
-
-    .thumbnail-wheel {
+    .title-container {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    .thumbnail-item {
-      position: absolute;
-      width: 35px;
-      height: 50px;
+      left: 50%;
+      bottom: 18vh;
+      transform: translateX(-50%);
+      width: min(92vw, 900px);
+      min-height: 2.2rem;
+      display: grid;
+      place-items: center;
       overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      will-change: transform;
-      transform: translateZ(0);
+      pointer-events: none;
+      z-index: 20;
     }
 
-    @media (max-width: 1000px) {
-      .slide {
-        width: 75vw;
-      }
+    .title-container p {
+      width: 100%;
+      text-align: center;
+      font-size: clamp(1.35rem, 3.8vw, 2.7rem);
+      letter-spacing: -0.025em;
+      text-transform: none;
+      color: #f3f3ee;
+      text-shadow: 0 4px 22px rgba(0, 0, 0, 0.45);
+      font-weight: 500;
+    }
 
-      .thumbnail-item {
-        width: 20px;
-        height: 30px;
+    .word {
+      position: relative;
+      display: inline-block;
+      will-change: transform;
+    }
+
+    footer p {
+      padding: 0.45rem 0.8rem;
+      border-radius: 999px;
+      background: rgba(239, 239, 234, 0.94);
+      color: #161616;
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      white-space: nowrap;
+    }
+
+    @media (max-width: 999px) {
+      nav {
+        justify-content: flex-start;
       }
 
       .page-label {
         display: none;
       }
+
+      .title-container {
+        bottom: 16vh;
+      }
+
+      footer p {
+        font-size: 0.64rem;
+      }
     }
   </style>
 </head>
 <body>
-  <a class="back-link" href="../portfolio.html?skipIntro=1">&#8592; Back to portfolio</a>
-  <p class="page-label">Blender Renders</p>
+  <nav>
+    <a class="back-link" href="../portfolio.html?skipIntro=1">&#8592; Back to portfolio</a>
+    <p class="page-label">Blender Renders</p>
+  </nav>
 
-  <div class="slider">
-    <p class="slide-title">Render 01</p>
+  <div class="container">
+    <div class="gallery-container">
+      <div class="gallery"></div>
+    </div>
+    <div class="title-container" aria-live="polite"></div>
   </div>
-  <div class="thumbnail-wheel"></div>
 
+  <footer>
+    <p>Click a render to focus. Click anywhere to close.</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/gsap.min.js"></script>
   <script>
     (() => {
-      const slider = document.querySelector('.slider');
-      const slideTitle = document.querySelector('.slide-title');
-      const thumbnailWheel = document.querySelector('.thumbnail-wheel');
+      if (typeof window.gsap === "undefined") {
+        return;
+      }
 
-      if (!slider || !slideTitle || !thumbnailWheel) {
+      const gallery = document.querySelector(".gallery");
+      const galleryContainer = document.querySelector(".gallery-container");
+      const titleContainer = document.querySelector(".title-container");
+
+      if (!gallery || !galleryContainer || !titleContainer) {
         return;
       }
 
       const TOTAL_RENDERS = 39;
-      const renders = Array.from({ length: TOTAL_RENDERS }, (_, index) => {
+      const collection = Array.from({ length: TOTAL_RENDERS }, (_, index) => {
         const id = index + 1;
         return {
-          name: `Render ${String(id).padStart(2, '0')}`,
-          file: `${id}.png`
+          title: "Render " + String(id).padStart(2, "0"),
+          img: "../assets/images/blender/" + id + ".png"
         };
       });
 
-      const totalSlides = renders.length;
-      let isMobile = window.innerWidth < 1000;
-      let slideWidth = isMobile ? window.innerWidth * 0.75 : window.innerWidth * 0.45;
-      let viewportCenter = window.innerWidth / 2;
-      let currentX = viewportCenter - slideWidth / 2;
-      let targetX = currentX;
-      let isPointerDown = false;
-      let pointerX = 0;
-      let pointerY = 0;
-      let thumbnailTick = 0;
-      let lastTitleIndex = -1;
+      const cards = [];
+      const transformState = [];
 
-      const slides = [];
-      const slideImages = [];
-      const thumbnails = [];
+      let currentTitle = null;
+      let isPreviewActive = false;
+      let isTransitioning = false;
 
-      const wrapValue = (value, max) => ((value % max) + max) % max;
-
-      const applyImageMeta = (img, item) => {
-        img.src = `../assets/images/blender/${item.file}`;
-        img.alt = `Blender ${item.name}`;
+      const config = {
+        imageCount: collection.length,
+        radius: window.innerWidth < 1000 ? 195 : 290,
+        sensitivity: 500,
+        effectFalloff: 250,
+        cardMoveAmount: 50,
+        lerpFactor: 0.15,
+        isMobile: window.innerWidth < 1000
       };
 
-      const createSlides = () => {
-        const fragment = document.createDocumentFragment();
-        renders.forEach((item, index) => {
-          const slide = document.createElement('div');
-          slide.className = 'slide';
+      const parallaxState = {
+        targetX: 0,
+        targetY: 0,
+        targetZ: 0,
+        currentX: 0,
+        currentY: 0,
+        currentZ: 0
+      };
 
-          const img = document.createElement('img');
-          applyImageMeta(img, item);
-          img.loading = index < 6 ? 'eager' : 'lazy';
-          img.decoding = 'async';
-          if (index === 0) {
-            img.fetchPriority = 'high';
+      const getGalleryScale = () => {
+        const width = window.innerWidth;
+        if (width < 700) {
+          return 0.58;
+        }
+        if (width < 1200) {
+          return 0.8;
+        }
+        return 1;
+      };
+
+      const setGalleryScale = () => {
+        gsap.set(gallery, {
+          scale: getGalleryScale()
+        });
+      };
+
+      const renderTitle = (text) => {
+        titleContainer.innerHTML = "";
+
+        const p = document.createElement("p");
+        const words = text.split(" ").map((word) => {
+          const span = document.createElement("span");
+          span.className = "word";
+          span.textContent = word + " ";
+          return span;
+        });
+
+        words.forEach((word) => p.appendChild(word));
+        titleContainer.appendChild(p);
+        currentTitle = p;
+
+        gsap.set(words, { y: "130%" });
+        gsap.to(words, {
+          y: "0%",
+          duration: 0.7,
+          delay: 0.6,
+          stagger: 0.07,
+          ease: "power4.out"
+        });
+      };
+
+      for (let i = 0; i < config.imageCount; i += 1) {
+        const angle = (i / config.imageCount) * Math.PI * 2;
+        const x = config.radius * Math.cos(angle);
+        const y = config.radius * Math.sin(angle);
+        const cardData = collection[i % collection.length];
+
+        const card = document.createElement("div");
+        card.className = "card";
+        card.dataset.index = String(i);
+        card.dataset.title = cardData.title;
+
+        const img = document.createElement("img");
+        img.src = cardData.img;
+        img.alt = cardData.title;
+        img.loading = i < 8 ? "eager" : "lazy";
+        img.decoding = "async";
+
+        card.appendChild(img);
+
+        gsap.set(card, {
+          x: x,
+          y: y,
+          rotation: (angle * 180) / Math.PI + 90,
+          transformPerspective: 900,
+          transformOrigin: "center center"
+        });
+
+        gallery.appendChild(card);
+        cards.push(card);
+        transformState.push({
+          currentRotation: 0,
+          targetRotation: 0,
+          currentX: 0,
+          targetX: 0,
+          currentY: 0,
+          targetY: 0,
+          currentScale: 1,
+          targetScale: 1,
+          angle: angle
+        });
+
+        card.addEventListener("click", (event) => {
+          if (!isPreviewActive && !isTransitioning) {
+            const index = Number(card.dataset.index);
+            togglePreview(index);
+            event.stopPropagation();
           }
-
-          slide.appendChild(img);
-          fragment.appendChild(slide);
-          slides.push(slide);
-          slideImages.push(img);
         });
-        slider.appendChild(fragment);
-      };
+      }
 
-      const createThumbnailItems = () => {
-        thumbnailWheel.innerHTML = '';
-        thumbnails.length = 0;
-        const fragment = document.createDocumentFragment();
+      function togglePreview(index) {
+        isPreviewActive = true;
+        isTransitioning = true;
 
-        renders.forEach((item, index) => {
-          const thumbnail = document.createElement('div');
-          thumbnail.className = 'thumbnail-item';
-          thumbnail.dataset.baseAngle = String((index / totalSlides) * Math.PI * 2);
+        const angle = transformState[index].angle;
+        const targetPosition = (Math.PI * 3) / 2;
+        let rotationRadians = targetPosition - angle;
 
-          const img = document.createElement('img');
-          applyImageMeta(img, item);
-          img.loading = 'lazy';
-          img.decoding = 'async';
+        if (rotationRadians > Math.PI) {
+          rotationRadians -= Math.PI * 2;
+        } else if (rotationRadians < -Math.PI) {
+          rotationRadians += Math.PI * 2;
+        }
 
-          thumbnail.appendChild(img);
-          fragment.appendChild(thumbnail);
-          thumbnails.push(thumbnail);
+        transformState.forEach((state) => {
+          state.currentRotation = 0;
+          state.targetRotation = 0;
+          state.currentScale = 1;
+          state.targetScale = 1;
+          state.currentX = 0;
+          state.targetX = 0;
+          state.currentY = 0;
+          state.targetY = 0;
         });
 
-        thumbnailWheel.appendChild(fragment);
-      };
-
-      const setLayoutMetrics = () => {
-        isMobile = window.innerWidth < 1000;
-        slideWidth = isMobile ? window.innerWidth * 0.75 : window.innerWidth * 0.45;
-        viewportCenter = window.innerWidth / 2;
-        const centerOffset = viewportCenter - slideWidth / 2;
-        currentX = centerOffset;
-        targetX = centerOffset;
-
-        slides.forEach((slide) => {
-          slide.style.width = `${slideWidth}px`;
+        gsap.to(gallery, {
+          onStart: () => {
+            cards.forEach((card, cardIndex) => {
+              const state = transformState[cardIndex];
+              gsap.to(card, {
+                x: config.radius * Math.cos(state.angle),
+                y: config.radius * Math.sin(state.angle),
+                rotationY: 0,
+                scale: 1,
+                duration: 1.15,
+                ease: "power4.out"
+              });
+            });
+          },
+          scale: config.isMobile ? 3.6 : 4.8,
+          y: config.isMobile ? 760 : 1140,
+          rotation: (rotationRadians * 180) / Math.PI + 360,
+          duration: 2,
+          ease: "power4.inOut",
+          onComplete: () => {
+            isTransitioning = false;
+          }
         });
-      };
 
-      const updateThumbnails = () => {
-        const exactSlideProgress = Math.abs(currentX) / slideWidth;
-        const currentRotationAngle = -(exactSlideProgress * (360 / totalSlides)) + 90;
-        const radius = isMobile ? 150 : 350;
+        gsap.to(parallaxState, {
+          currentX: 0,
+          currentY: 0,
+          currentZ: 0,
+          duration: 0.5,
+          ease: "power2.out",
+          onUpdate: () => {
+            gsap.set(galleryContainer, {
+              rotateX: parallaxState.currentX,
+              rotateY: parallaxState.currentY,
+              rotation: parallaxState.currentZ,
+              transformOrigin: "center center"
+            });
+          }
+        });
+
+        renderTitle(cards[index].dataset.title || "Render");
+      }
+
+      function resetGallery() {
+        if (isTransitioning) {
+          return;
+        }
+
+        isTransitioning = true;
+
+        if (currentTitle) {
+          const words = currentTitle.querySelectorAll(".word");
+          gsap.to(words, {
+            y: "-130%",
+            duration: 0.55,
+            stagger: 0.05,
+            ease: "power3.in",
+            onComplete: () => {
+              if (currentTitle) {
+                currentTitle.remove();
+              }
+              currentTitle = null;
+            }
+          });
+        }
+
+        gsap.to(gallery, {
+          scale: getGalleryScale(),
+          y: 0,
+          x: 0,
+          rotation: 0,
+          duration: 2.1,
+          ease: "power4.inOut",
+          onComplete: () => {
+            isPreviewActive = false;
+            isTransitioning = false;
+
+            Object.assign(parallaxState, {
+              targetX: 0,
+              targetY: 0,
+              targetZ: 0,
+              currentX: 0,
+              currentY: 0,
+              currentZ: 0
+            });
+          }
+        });
+      }
+
+      function handleResize() {
+        config.isMobile = window.innerWidth < 1000;
+        config.radius = config.isMobile ? 195 : 290;
+        setGalleryScale();
+
+        if (!isPreviewActive) {
+          Object.assign(parallaxState, {
+            targetX: 0,
+            targetY: 0,
+            targetZ: 0,
+            currentX: 0,
+            currentY: 0,
+            currentZ: 0
+          });
+
+          transformState.forEach((state, index) => {
+            state.targetRotation = 0;
+            state.currentRotation = 0;
+            state.targetScale = 1;
+            state.currentScale = 1;
+            state.targetX = 0;
+            state.currentX = 0;
+            state.targetY = 0;
+            state.currentY = 0;
+
+            const x = config.radius * Math.cos(state.angle);
+            const y = config.radius * Math.sin(state.angle);
+
+            gsap.set(cards[index], {
+              x: x,
+              y: y,
+              rotationY: 0,
+              scale: 1,
+              rotation: (state.angle * 180) / Math.PI + 90
+            });
+          });
+        }
+      }
+
+      document.addEventListener("click", () => {
+        if (isPreviewActive && !isTransitioning) {
+          resetGallery();
+        }
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && isPreviewActive && !isTransitioning) {
+          resetGallery();
+        }
+      });
+
+      document.addEventListener("mousemove", (event) => {
+        if (isPreviewActive || isTransitioning || config.isMobile) {
+          return;
+        }
+
         const centerX = window.innerWidth / 2;
-        const centerY = window.innerHeight / 2 - 25;
+        const centerY = window.innerHeight / 2;
+        const percentX = (event.clientX - centerX) / centerX;
+        const percentY = (event.clientY - centerY) / centerY;
 
-        for (let i = 0; i < thumbnails.length; i += 1) {
-          const thumbnail = thumbnails[i];
-          const baseAngle = Number(thumbnail.dataset.baseAngle);
-          const angle = baseAngle + (currentRotationAngle * Math.PI) / 180;
-          const x = radius * Math.cos(angle) + centerX;
-          const y = radius * Math.sin(angle) + centerY;
-          thumbnail.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-        }
-      };
+        parallaxState.targetY = percentX * 15;
+        parallaxState.targetX = -percentY * 15;
+        parallaxState.targetZ = (percentX + percentY) * 5;
 
-      const animate = () => {
-        currentX += (targetX - currentX) * 0.1;
-        const totalWidth = totalSlides * slideWidth;
+        cards.forEach((card, index) => {
+          const rect = card.getBoundingClientRect();
+          const dx = event.clientX - (rect.left + rect.width / 2);
+          const dy = event.clientY - (rect.top + rect.height / 2);
+          const distance = Math.sqrt(dx * dx + dy * dy);
 
-        if (currentX > totalWidth) {
-          currentX -= totalWidth;
-          targetX -= totalWidth;
-        } else if (currentX < -totalWidth) {
-          currentX += totalWidth;
-          targetX += totalWidth;
-        }
+          if (distance < config.sensitivity) {
+            const flipFactor = Math.max(0, 1 - distance / config.effectFalloff);
+            const angle = transformState[index].angle;
+            const moveAmount = config.cardMoveAmount * flipFactor;
 
-        const maxScale = isMobile ? 1.65 : 1.95;
-        const outerDistance = slideWidth * 2.4;
-        let centerSlideIndex = 0;
-        let closestDistance = Number.POSITIVE_INFINITY;
-
-        for (let i = 0; i < totalSlides; i += 1) {
-          const rawX = i * slideWidth + currentX;
-          let wrappedX = wrapValue(rawX, totalWidth);
-          if (wrappedX > totalWidth - slideWidth) {
-            wrappedX -= totalWidth;
+            transformState[index].targetRotation = 180 * flipFactor;
+            transformState[index].targetScale = 1 + 0.3 * flipFactor;
+            transformState[index].targetX = moveAmount * Math.cos(angle);
+            transformState[index].targetY = moveAmount * Math.sin(angle);
+          } else {
+            transformState[index].targetRotation = 0;
+            transformState[index].targetScale = 1;
+            transformState[index].targetX = 0;
+            transformState[index].targetY = 0;
           }
+        });
+      });
 
-          const slide = slides[i];
-          slide.style.transform = `translate3d(${wrappedX}px, 0, 0)`;
-
-          const slideCenterX = wrappedX + slideWidth / 2;
-          const distanceFromCenter = Math.abs(slideCenterX - viewportCenter);
-          if (distanceFromCenter < closestDistance) {
-            closestDistance = distanceFromCenter;
-            centerSlideIndex = i;
-          }
-
-          const progress = Math.min(distanceFromCenter / outerDistance, 1);
-          const easedProgress =
-            progress < 0.5
-              ? 2 * progress * progress
-              : 1 - Math.pow(-2 * progress + 2, 2) / 2;
-          const scale = 1 + easedProgress * (maxScale - 1);
-          slideImages[i].style.transform = `translateZ(0) scale(${scale.toFixed(3)})`;
+      document.addEventListener("mouseout", (event) => {
+        if (
+          (event.relatedTarget === null || event.relatedTarget.nodeName === "HTML") &&
+          !isPreviewActive &&
+          !isTransitioning
+        ) {
+          transformState.forEach((state) => {
+            state.targetRotation = 0;
+            state.targetScale = 1;
+            state.targetX = 0;
+            state.targetY = 0;
+          });
+          parallaxState.targetX = 0;
+          parallaxState.targetY = 0;
+          parallaxState.targetZ = 0;
         }
+      });
 
-        if (centerSlideIndex !== lastTitleIndex) {
-          lastTitleIndex = centerSlideIndex;
-          slideTitle.textContent = renders[centerSlideIndex]?.name || 'Render';
-        }
+      function animate() {
+        if (!isPreviewActive && !isTransitioning) {
+          parallaxState.currentX += (parallaxState.targetX - parallaxState.currentX) * config.lerpFactor;
+          parallaxState.currentY += (parallaxState.targetY - parallaxState.currentY) * config.lerpFactor;
+          parallaxState.currentZ += (parallaxState.targetZ - parallaxState.currentZ) * config.lerpFactor;
 
-        thumbnailTick = (thumbnailTick + 1) % 2;
-        if (thumbnailTick === 0) {
-          updateThumbnails();
+          gsap.set(galleryContainer, {
+            rotateX: parallaxState.currentX,
+            rotateY: parallaxState.currentY,
+            rotation: parallaxState.currentZ,
+            transformOrigin: "center center"
+          });
+
+          cards.forEach((card, index) => {
+            const state = transformState[index];
+
+            state.currentRotation += (state.targetRotation - state.currentRotation) * config.lerpFactor;
+            state.currentScale += (state.targetScale - state.currentScale) * config.lerpFactor;
+            state.currentX += (state.targetX - state.currentX) * config.lerpFactor;
+            state.currentY += (state.targetY - state.currentY) * config.lerpFactor;
+
+            const x = config.radius * Math.cos(state.angle);
+            const y = config.radius * Math.sin(state.angle);
+
+            gsap.set(card, {
+              x: x + state.currentX,
+              y: y + state.currentY,
+              rotationY: state.currentRotation,
+              scale: state.currentScale,
+              rotation: (state.angle * 180) / Math.PI + 90,
+              transformOrigin: "center center",
+              transformPerspective: 1000
+            });
+          });
         }
 
         requestAnimationFrame(animate);
-      };
+      }
 
-      const handleWheel = (event) => {
-        event.preventDefault();
-        const delta = Math.max(-120, Math.min(120, event.deltaY || 0));
-        targetX -= delta * 0.85;
-      };
-
-      const getPointerClientX = (event) => {
-        if ('touches' in event && event.touches.length > 0) {
-          return event.touches[0].clientX;
-        }
-        if ('changedTouches' in event && event.changedTouches.length > 0) {
-          return event.changedTouches[0].clientX;
-        }
-        return event.clientX;
-      };
-
-      const startPointer = (event) => {
-        isPointerDown = true;
-        pointerX = getPointerClientX(event);
-        if ('touches' in event && event.touches.length > 0) {
-          pointerY = event.touches[0].clientY;
-        } else if ('changedTouches' in event && event.changedTouches.length > 0) {
-          pointerY = event.changedTouches[0].clientY;
-        } else {
-          pointerY = event.clientY;
-        }
-      };
-
-      const movePointer = (event) => {
-        if (!isPointerDown) return;
-        const nextX = getPointerClientX(event);
-        const deltaX = nextX - pointerX;
-        let nextY = 0;
-        if ('touches' in event && event.touches.length > 0) {
-          nextY = event.touches[0].clientY;
-        } else if ('changedTouches' in event && event.changedTouches.length > 0) {
-          nextY = event.changedTouches[0].clientY;
-        } else {
-          nextY = event.clientY;
-        }
-        const deltaY = nextY - pointerY;
-        pointerX = nextX;
-        pointerY = nextY;
-
-        if (Math.abs(deltaY) > Math.abs(deltaX)) {
-          targetX -= deltaY * 1.15;
-          return;
-        }
-        targetX += deltaX * 1.25;
-      };
-
-      const endPointer = () => {
-        isPointerDown = false;
-      };
-
-      const onResize = () => {
-        setLayoutMetrics();
-        updateThumbnails();
-      };
-
-      createSlides();
-      createThumbnailItems();
-      setLayoutMetrics();
-      updateThumbnails();
-
-      window.addEventListener('wheel', handleWheel, { passive: false });
-      window.addEventListener('resize', onResize);
-      slider.addEventListener('pointerdown', startPointer);
-      window.addEventListener('pointermove', movePointer);
-      window.addEventListener('pointerup', endPointer);
-      window.addEventListener('pointercancel', endPointer);
-
+      window.addEventListener("resize", handleResize);
+      handleResize();
       animate();
     })();
   </script>
