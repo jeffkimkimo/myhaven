@@ -5,479 +5,450 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Code Projects | Jeffkim Aminiel Kimo</title>
   <link rel="icon" type="image/png" href="../assets/branding/jklogo2.png" />
-  <link rel="stylesheet" href="../code_slider/css/dev/app.css" />
+  <link rel="stylesheet" href="../coding_projects/style.css" />
   <style>
-    .container {
-      background:
-        radial-gradient(circle at 18% 15%, rgba(251, 64, 22, 0.16), transparent 34%),
-        radial-gradient(circle at 78% 85%, rgba(75, 129, 255, 0.12), transparent 38%),
-        linear-gradient(160deg, #090a0e, #050507 62%, #07080d);
-      touch-action: none;
+    :root {
+      --bg: #050507;
+      --fg: #111213;
+      --variant-1: #ffc640;
+      --variant-2: #d5d9d2;
+      --variant-3: #b8bdb5;
+      --disabled-folder-bg: #e7ebe3;
+      --disabled-folder-fg: #afb4ac;
     }
 
-    .slider {
-      perspective: 1100px;
-      perspective-origin: 50% 82%;
-    }
-
-    .slide {
-      background:
-        radial-gradient(circle at 12% 14%, rgba(251, 64, 22, 0.22), transparent 46%),
-        linear-gradient(145deg, rgba(22, 22, 24, 0.94), rgba(8, 8, 10, 0.97));
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      box-shadow: 0 24px 52px rgba(0, 0, 0, 0.52);
-      border-radius: 0.8rem;
-      width: min(62vw, 780px);
-      height: clamp(22rem, 56vh, 28rem);
-      top: 56%;
-      overflow: hidden;
-      transform-origin: 50% 95%;
-      will-change: transform, opacity, filter;
-    }
-
-    .slide::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(transparent 55%, rgba(0, 0, 0, 0.6)),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.05), transparent 35%);
+    .topbar {
+      box-sizing: border-box;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      z-index: 30;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.55rem;
       pointer-events: none;
     }
 
-    .slide.is-active {
-      border-color: rgba(251, 64, 22, 0.5);
-      box-shadow:
-        0 34px 66px rgba(0, 0, 0, 0.58),
-        0 0 0 1px rgba(251, 64, 22, 0.22) inset;
+    .topbar-link {
+      box-sizing: border-box;
+      pointer-events: auto;
+      display: inline-block;
+      text-decoration: none;
+      text-transform: uppercase;
+      font-family: "DM Mono";
+      font-size: 0.72rem;
+      line-height: 1.1;
+      letter-spacing: 0.07em;
+      color: #0d0f10;
+      border: 1px solid rgba(13, 15, 16, 0.26);
+      border-radius: 999px;
+      padding: 0.5rem 0.8rem;
+      background: rgba(242, 246, 239, 0.82);
+      backdrop-filter: blur(4px);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
     }
 
-    .stack-hint {
+    .topbar-link:hover {
+      transform: translateY(-1px);
+      border-color: rgba(13, 15, 16, 0.45);
+      background: rgba(255, 255, 255, 0.92);
+    }
+
+    .topbar-link.back {
+      max-width: min(44vw, 14.5rem);
+    }
+
+    .topbar-link.github {
+      margin-left: auto;
+      max-width: min(40vw, 12rem);
+      text-align: right;
+    }
+
+    .hint {
       position: fixed;
       left: 50%;
-      bottom: 1.2rem;
+      bottom: 0.9rem;
       transform: translateX(-50%);
-      z-index: 30;
-      padding: 0.46rem 0.74rem;
+      z-index: 25;
+      margin: 0;
+      padding: 0.38rem 0.65rem;
       border-radius: 999px;
-      border: 1px solid rgba(251, 64, 22, 0.45);
-      background: rgba(8, 9, 14, 0.74);
-      color: rgba(255, 255, 255, 0.85);
-      font-size: 0.66rem;
-      letter-spacing: 0.08em;
+      border: 1px solid rgba(13, 15, 16, 0.24);
+      background: rgba(245, 247, 241, 0.76);
+      font-family: "DM Mono";
+      font-size: 0.62rem;
       text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: rgba(10, 11, 14, 0.76);
       pointer-events: none;
-      animation: hintPulse 1.8s ease-in-out infinite;
-      transition: opacity 0.28s ease, transform 0.28s ease;
     }
 
-    .corner-github {
-      position: fixed;
-      top: 1rem;
-      right: 1rem;
-      z-index: 30;
-      padding: 0.5rem 0.7rem;
-      border-radius: 0.45rem;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      background: rgba(10, 11, 16, 0.8);
-      color: #ffffff;
-      text-transform: uppercase;
-      font-size: 0.68rem;
-      letter-spacing: 0.07em;
+    .folder {
       text-decoration: none;
-      transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+      color: inherit;
+      isolation: isolate;
     }
 
-    .corner-github:hover {
-      border-color: rgba(251, 64, 22, 0.7);
-      background: rgba(251, 64, 22, 0.2);
-      color: #fff;
-    }
-
-    .corner-back {
-      position: fixed;
-      top: 1rem;
-      left: 1rem;
-      z-index: 30;
-      padding: 0.5rem 0.7rem;
-      border-radius: 0.45rem;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      background: rgba(10, 11, 16, 0.8);
-      color: #ffffff;
-      text-transform: uppercase;
-      font-size: 0.68rem;
-      letter-spacing: 0.07em;
-      text-decoration: none;
-      transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
-    }
-
-    .corner-back:hover {
-      border-color: rgba(251, 64, 22, 0.7);
-      background: rgba(251, 64, 22, 0.2);
-      color: #fff;
-    }
-
-    body.has-interacted .stack-hint {
-      opacity: 0;
-      transform: translate(-50%, 10px);
-    }
-
-    @keyframes hintPulse {
-      0%, 100% { opacity: 0.55; }
-      50% { opacity: 1; }
-    }
-
-    .slide-content {
+    .folder::after {
+      content: "Open";
       position: absolute;
-      left: 1.2rem;
-      right: 1.2rem;
-      top: 50%;
-      bottom: auto;
-      transform: translateY(-50%);
-      z-index: 2;
-      display: grid;
-      gap: 0.68rem;
-      align-content: center;
-      color: #fff;
-      padding: 0.9rem;
-      border-radius: 0.6rem;
-      background: linear-gradient(180deg, rgba(7, 7, 9, 0.22), rgba(7, 7, 9, 0.66));
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(4px);
-    }
-
-    .slide-title {
-      position: static;
-      top: auto;
-      left: auto;
-      transform: none;
-      display: block;
-      width: auto;
-      padding: 0;
-      background: transparent;
-      text-align: left;
-      pointer-events: auto;
-      font-size: clamp(1.4rem, 2.8vw, 2.2rem);
-      letter-spacing: -0.04rem;
-      line-height: 1.05;
-      text-transform: none;
-    }
-
-    .slide-meta {
-      display: block;
-      font-size: 0.7rem;
-      text-transform: uppercase;
+      right: 0.9rem;
+      bottom: 0.9rem;
+      font-family: "DM Mono";
+      font-size: 0.6rem;
       letter-spacing: 0.08em;
-      color: rgba(255, 255, 255, 0.74);
-    }
-
-    .slide-desc {
-      display: block;
-      font-size: 0.78rem;
-      line-height: 1.45;
-      text-transform: none;
-      color: rgba(255, 255, 255, 0.9);
-      max-width: 92%;
-    }
-
-    .slide-link {
-      display: inline-flex;
-      width: max-content;
-      padding: 0.45rem 0.65rem;
-      font-size: 0.72rem;
-      font-weight: 500;
-      letter-spacing: 0.02em;
       text-transform: uppercase;
-      color: #121212;
-      background: #f3f3f5;
-      border-radius: 0.25rem;
-      border: 1px solid rgba(255, 255, 255, 0.65);
-      transition: background 0.2s ease, color 0.2s ease;
+      color: rgba(17, 18, 19, 0.62);
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
     }
 
-    .slide-link:hover {
-      background: #fb4016;
-      color: #fff;
+    .folder:hover::after {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .folder-name h1 {
+      font-size: clamp(1.4rem, 2.9vw, 2.6rem);
+    }
+
+    .folder-preview {
+      display: none;
+    }
+
+    .folder-wrapper {
+      z-index: 2;
+    }
+
+    .folder-paper {
+      position: absolute;
+      left: 1rem;
+      bottom: 0.65rem;
+      width: min(27.5rem, calc(100% - 2rem));
+      min-height: 10.6rem;
+      padding: 0.86rem 0.92rem 0.95rem;
+      border: 1px solid rgba(17, 18, 19, 0.34);
+      border-radius: 0.45rem 0.45rem 0.22rem 0.22rem;
+      background:
+        linear-gradient(180deg, rgba(255, 252, 238, 0.96), rgba(242, 236, 214, 0.96)),
+        repeating-linear-gradient(
+          to bottom,
+          transparent 0,
+          transparent 1.28rem,
+          rgba(17, 18, 19, 0.08) 1.28rem,
+          rgba(17, 18, 19, 0.08) 1.32rem
+        );
+      box-shadow: 0 12px 20px rgba(0, 0, 0, 0.18);
+      pointer-events: none;
+      z-index: 1;
+      opacity: 1;
+      transform: translateY(3.1rem) rotate(-0.4deg) scale(1);
+      transform-origin: bottom left;
+      will-change: transform, opacity;
+    }
+
+    .folder-paper-title,
+    .folder-paper-desc,
+    .folder-paper-stack {
+      margin: 0;
+      text-transform: none;
+      line-height: 1.25;
+      color: rgba(12, 13, 16, 0.9);
+    }
+
+    .folder-paper-title {
+      font-family: "DM Sans";
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      margin-bottom: 0.28rem;
+    }
+
+    .folder-paper-desc {
+      font-family: "DM Sans";
+      font-size: 0.74rem;
+      line-height: 1.32;
+      margin-bottom: 0.36rem;
+      color: rgba(12, 13, 16, 0.82);
+    }
+
+    .folder-paper-stack {
+      font-family: "DM Mono";
+      font-size: 0.62rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: rgba(12, 13, 16, 0.62);
+    }
+
+    .folder-paper-logos {
+      display: flex;
+      align-items: center;
+      gap: 0.42rem;
+      margin: 0 0 0.44rem;
+    }
+
+    .folder-paper-logo {
+      width: 1.5rem;
+      height: 1.5rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .folder-paper-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .folder-preview-img {
+      width: 8.3rem;
+      height: 6.2rem;
+      top: 34%;
+    }
+
+    .tech-card {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      gap: 0;
+      padding: 0.25rem;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .tech-card img {
+      width: 3.1rem;
+      height: 3.1rem;
+      object-fit: contain;
+    }
+
+    .tech-card span {
+      display: none;
+    }
+
+    .row:nth-child(1) {
+      bottom: -11rem;
+    }
+
+    .row:nth-child(2) {
+      bottom: -4.25rem;
+    }
+
+    .row:nth-child(2) .folder:nth-child(1),
+    .row:nth-child(2) .folder:nth-child(2) {
+      flex: 1;
     }
 
     @media (max-width: 1000px) {
-      .slide {
-        width: 80%;
-        height: 22rem;
-        top: 58%;
+      .topbar {
+        padding: 0.75rem;
       }
 
-      .slide-content {
-        left: 0.9rem;
-        right: 0.9rem;
+      .topbar-link {
+        font-size: 0.64rem;
+        letter-spacing: 0.05em;
+        padding: 0.45rem 0.65rem;
       }
 
-      .slide-desc {
-        max-width: 100%;
+      .topbar-link.back {
+        max-width: 50vw;
+      }
+
+      .topbar-link.github {
+        max-width: 40vw;
+      }
+
+      .hint {
+        bottom: 0.55rem;
+      }
+
+      .folder::after {
+        opacity: 1;
+        transform: none;
+      }
+
+      .folder-paper {
+        display: none;
       }
     }
   </style>
 </head>
 <body>
-  <div class="wrapper">
-    <main class="page">
-      <div data-anim-index="" class="index">
-        <div class="container">
-          <div id="code-project-slider" class="slider"></div>
-        </div>
-        <a class="corner-back" href="../portfolio.html?skipIntro=1">Back to portfolio</a>
-        <a class="corner-github" href="https://github.com/jeffkimkimo" target="_blank" rel="noopener">Github profile</a>
-        <p class="stack-hint">Scroll to explore</p>
+  <nav class="topbar" aria-label="Code page actions">
+    <a class="topbar-link back" href="../portfolio.html?skipIntro=1">Back to portfolio</a>
+    <a class="topbar-link github" href="https://github.com/jeffkimkimo" target="_blank" rel="noopener">GitHub</a>
+  </nav>
+
+  <div data-anim-index="" class="index">
+    <div class="folders">
+      <div class="row">
+        <a class="folder variant-1" href="https://github.com/jeffkimkimo/myhaven" target="_blank" rel="noopener">
+          <div class="folder-preview">
+            <div class="folder-preview-img">
+              <div class="tech-card">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5 logo" />
+                <span>HTML5</span>
+              </div>
+            </div>
+            <div class="folder-preview-img">
+              <div class="tech-card">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3 logo" />
+                <span>CSS3</span>
+              </div>
+            </div>
+            <div class="folder-preview-img">
+              <div class="tech-card">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript logo" />
+                <span>JavaScript</span>
+              </div>
+            </div>
+          </div>
+          <div class="folder-paper" aria-hidden="true">
+            <p class="folder-paper-title">my portfolio site</p>
+            <p class="folder-paper-desc">Portfolio with custom intro flow, motion-heavy sections, and multi-page project navigation.</p>
+            <div class="folder-paper-logos" aria-hidden="true">
+              <span class="folder-paper-logo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="" /></span>
+              <span class="folder-paper-logo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="" /></span>
+              <span class="folder-paper-logo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="" /></span>
+            </div>
+            <p class="folder-paper-stack">HTML · CSS · JavaScript · GSAP</p>
+          </div>
+          <div class="folder-wrapper">
+            <div class="folder-index"><p>01</p></div>
+            <div class="folder-name"><h1>my portfolio site</h1></div>
+          </div>
+        </a>
+
+        <a class="folder variant-2" href="https://github.com/jeffkimkimo/2048game" target="_blank" rel="noopener">
+          <div class="folder-preview">
+            <div class="folder-preview-img">
+              <div class="tech-card">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python logo" />
+                <span>Python</span>
+              </div>
+            </div>
+            <div class="folder-preview-img">
+              <div class="tech-card">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bash/bash-original.svg" alt="Bash logo" />
+                <span>Bash / CLI</span>
+              </div>
+            </div>
+            <div class="folder-preview-img">
+              <div class="tech-card">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="Git logo" />
+                <span>Git</span>
+              </div>
+            </div>
+          </div>
+          <div class="folder-paper" aria-hidden="true">
+            <p class="folder-paper-title">2048 game</p>
+            <p class="folder-paper-desc">Terminal game with movement logic, merge scoring, and run-after-run score tracking.</p>
+            <div class="folder-paper-logos" aria-hidden="true">
+              <span class="folder-paper-logo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="" /></span>
+              <span class="folder-paper-logo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bash/bash-original.svg" alt="" /></span>
+              <span class="folder-paper-logo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="" /></span>
+            </div>
+            <p class="folder-paper-stack">Python · CLI · Game loop</p>
+          </div>
+          <div class="folder-wrapper">
+            <div class="folder-index"><p>02</p></div>
+            <div class="folder-name"><h1>2048 game</h1></div>
+          </div>
+        </a>
       </div>
-    </main>
+
+      <div class="row">
+        <a class="folder variant-2" href="https://github.com/jeffkimkimo/TotalSteps" target="_blank" rel="noopener">
+          <div class="folder-preview">
+            <div class="folder-preview-img">
+              <div class="tech-card">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/swift/swift-original.svg" alt="Swift logo" />
+                <span>Swift</span>
+              </div>
+            </div>
+            <div class="folder-preview-img">
+              <div class="tech-card">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/xcode/xcode-original.svg" alt="Xcode logo" />
+                <span>Xcode</span>
+              </div>
+            </div>
+            <div class="folder-preview-img">
+              <div class="tech-card">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="Git logo" />
+                <span>SwiftUI Stack</span>
+              </div>
+            </div>
+          </div>
+          <div class="folder-paper" aria-hidden="true">
+            <p class="folder-paper-title">TotalSteps</p>
+            <p class="folder-paper-desc">TotalSteps is a minimalist step-tracking app built to answer one simple question: how many steps have you taken in your lifetime?</p>
+            <div class="folder-paper-logos" aria-hidden="true">
+              <span class="folder-paper-logo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/swift/swift-original.svg" alt="" /></span>
+              <span class="folder-paper-logo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/xcode/xcode-original.svg" alt="" /></span>
+              <span class="folder-paper-logo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="" /></span>
+            </div>
+            <p class="folder-paper-stack">Swift · SwiftUI · Health data</p>
+          </div>
+          <div class="folder-wrapper">
+            <div class="folder-index"><p>03</p></div>
+            <div class="folder-name"><h1>TotalSteps</h1></div>
+          </div>
+        </a>
+
+        <a class="folder variant-3" href="https://github.com/jeffkimkimo/WhatLog" target="_blank" rel="noopener">
+          <div class="folder-preview">
+            <div class="folder-preview-img">
+              <div class="tech-card">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python logo" />
+                <span>Python</span>
+              </div>
+            </div>
+            <div class="folder-preview-img">
+              <div class="tech-card">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React logo" />
+                <span>React</span>
+              </div>
+            </div>
+            <div class="folder-preview-img">
+              <div class="tech-card">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" alt="FastAPI logo" />
+                <span>FastAPI</span>
+              </div>
+            </div>
+          </div>
+          <div class="folder-paper" aria-hidden="true">
+            <p class="folder-paper-title">WhatLog</p>
+            <p class="folder-paper-desc">whatLog is a personal media logging application built as part of the What? project. It allows users to log movies and songs they have watched or listened to, without ratings or reviews.</p>
+            <div class="folder-paper-logos" aria-hidden="true">
+              <span class="folder-paper-logo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="" /></span>
+              <span class="folder-paper-logo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="" /></span>
+              <span class="folder-paper-logo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" alt="" /></span>
+            </div>
+            <p class="folder-paper-stack">Python · React · FastAPI · HarperDB</p>
+          </div>
+          <div class="folder-wrapper">
+            <div class="folder-index"><p>04</p></div>
+            <div class="folder-name"><h1>WhatLog</h1></div>
+          </div>
+        </a>
+      </div>
+    </div>
   </div>
 
+  <p class="hint">Hover folders to preview. Click to open code.</p>
+
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/gsap.min.js"></script>
-  <script>
-    (() => {
-      const slider = document.getElementById('code-project-slider');
-      const container = document.querySelector('.container');
-
-      if (!slider || !container || typeof gsap === 'undefined') return;
-
-      const projects = [
-        {
-          title: '2048 Game',
-          meta: 'Python',
-          description: 'Console-based 2048 with score tracking and replay support.',
-          href: 'https://github.com/jeffkimkimo/2048game'
-        },
-        {
-          title: 'Portfolio Website',
-          meta: 'HTML / CSS / JavaScript',
-          description: 'Personal portfolio site for films, scripts, and code projects.',
-          href: 'https://github.com/jeffkimkimo/myhaven'
-        },
-        {
-          title: 'TotalSteps',
-          meta: 'Swift / SwiftUI / HealthKit',
-          description: 'iOS app that calculates your true all-time lifetime step count.',
-          href: 'https://github.com/jeffkimkimo/TotalSteps'
-        },
-        {
-          title: 'WhatLog',
-          meta: 'Python / React / FastAPI / HarperDB',
-          description: 'Media logging app for movies and songs without ratings or reviews.',
-          href: 'https://github.com/jeffkimkimo/whatreview'
-        }
-      ];
-
-      const visibleCount = Math.min(5, projects.length);
-      const slides = [];
-      let frontIndex = 0;
-      let isAnimating = false;
-      let wheelAccumulator = 0;
-      let wheelLocked = false;
-      let touchStartY = 0;
-      let touchStartX = 0;
-      let touchLastY = 0;
-      let touchLastX = 0;
-      let touchAccumulator = 0;
-      let touchAxisLock = '';
-      const wheelThreshold = 70;
-      const touchThreshold = 42;
-      const slotYStep = 74;
-      const slotXStep = 16;
-      const slotZStep = 75;
-      const slotScaleStep = 0.055;
-      const slotRotateStep = 4.8;
-      const slotOpacityStep = 0.12;
-      const slotBlurStep = 0.42;
-
-      const wrapIndex = (index) => (index + projects.length) % projects.length;
-      const projectAt = (index) => projects[wrapIndex(index)];
-      const markUserInteracted = () => document.body.classList.add('has-interacted');
-
-      const createSlideElement = () => {
-        const slide = document.createElement('article');
-        slide.className = 'slide';
-        slide.innerHTML = `
-          <div class="slide-content">
-            <h1 class="slide-title"></h1>
-            <p class="slide-meta"></p>
-            <p class="slide-desc"></p>
-            <a class="slide-link" target="_blank" rel="noopener">View code</a>
-          </div>
-        `;
-        return slide;
-      };
-
-      const hydrateSlide = (slide, project) => {
-        const title = slide.querySelector('.slide-title');
-        const meta = slide.querySelector('.slide-meta');
-        const desc = slide.querySelector('.slide-desc');
-        const link = slide.querySelector('.slide-link');
-
-        if (!title || !meta || !desc || !link) return;
-
-        title.textContent = project.title;
-        meta.textContent = project.meta;
-        desc.textContent = project.description;
-        link.href = project.href;
-      };
-
-      const targetStateForSlot = (slot) => ({
-        xPercent: -50,
-        yPercent: -50,
-        x: (slot % 2 === 0 ? -1 : 1) * slot * slotXStep,
-        y: -(slot * slotYStep),
-        z: -(slot * slotZStep),
-        scale: Math.max(0.78, 1 - (slot * slotScaleStep)),
-        rotationX: slot * slotRotateStep,
-        rotationZ: (slot % 2 === 0 ? -1 : 1) * slot * 0.9,
-        opacity: Math.max(0.42, 1 - (slot * slotOpacityStep)),
-        filter: `blur(${Math.min(3, slot * slotBlurStep).toFixed(2)}px)`
-      });
-
-      const animateStack = () => {
-        slides.forEach((slide, slot) => {
-          slide.classList.toggle('is-active', slot === 0);
-          slide.style.pointerEvents = slot === 0 ? 'auto' : 'none';
-          slide.style.zIndex = String(visibleCount - slot);
-          gsap.to(slide, {
-            ...targetStateForSlot(slot),
-            duration: 0.88,
-            ease: 'expo.out',
-            overwrite: true
-          });
-        });
-
-        gsap.delayedCall(0.9, () => {
-          isAnimating = false;
-        });
-      };
-
-      const initializeSlider = () => {
-        for (let slot = 0; slot < visibleCount; slot += 1) {
-          const slide = createSlideElement();
-          hydrateSlide(slide, projectAt(frontIndex + slot));
-          slide.style.zIndex = String(visibleCount - slot);
-          slider.appendChild(slide);
-          slides.push(slide);
-          gsap.set(slide, targetStateForSlot(slot));
-        }
-      };
-
-      const scrollDown = () => {
-        if (isAnimating) return;
-        isAnimating = true;
-        frontIndex = wrapIndex(frontIndex + 1);
-
-        const recycled = slides.shift();
-        hydrateSlide(recycled, projectAt(frontIndex + visibleCount - 1));
-        gsap.set(recycled, {
-          ...targetStateForSlot(visibleCount),
-          y: -(visibleCount * slotYStep) - 40,
-          opacity: 0
-        });
-        slides.push(recycled);
-
-        animateStack();
-      };
-
-      const scrollUp = () => {
-        if (isAnimating) return;
-        isAnimating = true;
-        frontIndex = wrapIndex(frontIndex - 1);
-
-        const recycled = slides.pop();
-        hydrateSlide(recycled, projectAt(frontIndex));
-        gsap.set(recycled, {
-          xPercent: -50,
-          yPercent: -50,
-          y: 70,
-          z: 90,
-          scale: 1.08,
-          rotationX: -6,
-          filter: 'blur(2px)',
-          opacity: 0
-        });
-        slides.unshift(recycled);
-
-        animateStack();
-      };
-
-      const handleDirection = (direction) => {
-        markUserInteracted();
-        if (direction === 'down') {
-          scrollDown();
-          return;
-        }
-        scrollUp();
-      };
-
-      container.addEventListener('wheel', (event) => {
-        event.preventDefault();
-        if (wheelLocked || isAnimating) return;
-
-        wheelAccumulator += Math.abs(event.deltaY);
-        if (wheelAccumulator < wheelThreshold) return;
-
-        wheelAccumulator = 0;
-        wheelLocked = true;
-        handleDirection(event.deltaY > 0 ? 'up' : 'down');
-        window.setTimeout(() => {
-          wheelLocked = false;
-        }, 520);
-      }, { passive: false });
-
-      container.addEventListener('touchstart', (event) => {
-        if (isAnimating || !event.touches[0]) return;
-        touchStartY = event.touches[0].clientY;
-        touchStartX = event.touches[0].clientX;
-        touchLastY = touchStartY;
-        touchLastX = touchStartX;
-        touchAccumulator = 0;
-        touchAxisLock = '';
-      }, { passive: true });
-
-      container.addEventListener('touchmove', (event) => {
-        if (isAnimating || !event.touches[0]) return;
-
-        const nextY = event.touches[0].clientY;
-        const nextX = event.touches[0].clientX;
-        const deltaY = touchLastY - nextY;
-        const deltaX = touchLastX - nextX;
-        touchLastY = nextY;
-        touchLastX = nextX;
-
-        if (!touchAxisLock) {
-          touchAxisLock = Math.abs(deltaY) >= Math.abs(deltaX) ? 'y' : 'x';
-        }
-
-        if (touchAxisLock !== 'y') return;
-
-        touchAccumulator += deltaY;
-        if (Math.abs(touchAccumulator) < touchThreshold) return;
-
-        handleDirection(touchAccumulator > 0 ? 'up' : 'down');
-        touchAccumulator = 0;
-      }, { passive: true });
-
-      container.addEventListener('touchend', (event) => {
-        if (isAnimating || !event.changedTouches[0]) return;
-
-        const deltaY = touchStartY - event.changedTouches[0].clientY;
-        const deltaX = Math.abs(touchStartX - event.changedTouches[0].clientX);
-        if (Math.abs(deltaY) < 45 || Math.abs(deltaY) < deltaX) return;
-        handleDirection(deltaY > 0 ? 'up' : 'down');
-      }, { passive: true });
-
-      window.addEventListener('keydown', (event) => {
-        if (event.key === 'ArrowDown') {
-          handleDirection('up');
-        } else if (event.key === 'ArrowUp') {
-          handleDirection('down');
-        }
-      });
-
-      initializeSlider();
-    })();
-  </script>
+  <script src="../coding_projects/script.js"></script>
 </body>
 </html>
