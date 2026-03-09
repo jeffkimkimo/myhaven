@@ -1,6 +1,74 @@
 {
   "rewrites": [
     {
+      "source": "/anxiety.html",
+      "destination": "/pages/anxiety.html"
+    },
+    {
+      "source": "/blender-renders.html",
+      "destination": "/pages/blender-renders.html"
+    },
+    {
+      "source": "/boiling-point.html",
+      "destination": "/pages/boiling-point.html"
+    },
+    {
+      "source": "/code.html",
+      "destination": "/pages/code.html"
+    },
+    {
+      "source": "/college-day.html",
+      "destination": "/pages/college-day.html"
+    },
+    {
+      "source": "/death-of-cinema.html",
+      "destination": "/pages/death-of-cinema.html"
+    },
+    {
+      "source": "/derry.html",
+      "destination": "/pages/derry.html"
+    },
+    {
+      "source": "/film.html",
+      "destination": "/pages/film.html"
+    },
+    {
+      "source": "/goal.html",
+      "destination": "/pages/goal.html"
+    },
+    {
+      "source": "/inspirations.html",
+      "destination": "/pages/inspirations.html"
+    },
+    {
+      "source": "/journal.html",
+      "destination": "/pages/journal.html"
+    },
+    {
+      "source": "/mask.html",
+      "destination": "/pages/mask.html"
+    },
+    {
+      "source": "/missed.html",
+      "destination": "/pages/missed.html"
+    },
+    {
+      "source": "/new-chapter.html",
+      "destination": "/pages/new-chapter.html"
+    },
+    {
+      "source": "/resume.html",
+      "destination": "/pages/resume.html"
+    },
+    {
+      "source": "/robofriend.html",
+      "destination": "/pages/robofriend.html"
+    },
+    {
+      "source": "/script.html",
+      "destination": "/pages/script.html"
+    },
+    {
       "source": "/",
       "destination": "portfolio.html"
     }

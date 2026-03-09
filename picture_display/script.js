@@ -22,7 +22,7 @@ function initPixelReveal(container) {
 	const overlay = container.querySelector('.pixel-overlay')
 	if (!overlay) return
 
-	const overlaySrc = '../torgrimstudios.png'
+	const overlaySrc = '../assets/branding/torgrimstudios.png'
 	const overlayImage = new Image()
 	overlayImage.decoding = 'async'
 	overlayImage.src = overlaySrc

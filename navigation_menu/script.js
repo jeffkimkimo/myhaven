@@ -1,10 +1,10 @@
 const menuItems = [
-	{ label: 'Films', icon: 'film-sharp', href: 'film.html' },
+	{ label: 'Films', icon: 'film-sharp', href: 'pages/film.html' },
 	{ label: 'About Me', icon: 'person-sharp', href: 'about_me/index.html' },
-	{ label: 'Code', icon: 'code-slash-sharp', href: 'code.html' },
-	{ label: 'Blender', icon: 'cube-sharp', href: 'blender-renders.html' },
-	{ label: 'Resume', icon: 'document-text-sharp', href: 'resume.html' },
-	{ label: 'Inspiration', icon: 'sparkles-sharp', href: 'inspirations.html' },
+	{ label: 'Code', icon: 'code-slash-sharp', href: 'pages/code.html' },
+	{ label: 'Blender', icon: 'cube-sharp', href: 'pages/blender-renders.html' },
+	{ label: 'Resume', icon: 'document-text-sharp', href: 'pages/resume.html' },
+	{ label: 'Inspiration', icon: 'sparkles-sharp', href: 'pages/inspirations.html' },
 ]
 
 let isOpen = false
