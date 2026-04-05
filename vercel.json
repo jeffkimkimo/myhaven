@@ -37,6 +37,10 @@
       "destination": "/pages/goal.html"
     },
     {
+      "source": "/i-quit.html",
+      "destination": "/pages/i-quit.html"
+    },
+    {
       "source": "/inspirations.html",
       "destination": "/pages/inspirations.html"
     },
@@ -67,6 +71,10 @@
     {
       "source": "/script.html",
       "destination": "/pages/script.html"
+    },
+    {
+      "source": "/the-snow-storm.html",
+      "destination": "/pages/the-snow-storm.html"
     },
     {
       "source": "/",

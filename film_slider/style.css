@@ -82,18 +82,25 @@ nav a#logo {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 50%;
-  height: 60px;
+  width: min(72vw, 56rem);
+  height: 84px;
   text-align: center;
   clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  overflow: hidden;
   z-index: 10;
 }
 
 .slider-title h1 {
   position: absolute;
   width: 100%;
-  height: 50px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1rem;
   text-align: center;
+  line-height: 0.95;
+  white-space: nowrap;
   color: #fff;
   font-size: 50px;
   font-weight: 500;
@@ -131,6 +138,7 @@ nav a#logo {
 
 .slider-items p {
   transition: 0.5s color;
+  cursor: pointer;
 }
 
 .slider-items p.activeItem {
@@ -177,6 +185,16 @@ footer {
 }
 
 @media (max-width: 900px) {
+  .slider-title {
+    width: min(92vw, 30rem);
+    height: 70px;
+  }
+
+  .slider-title h1 {
+    padding: 0 0.35rem;
+    font-size: clamp(1.9rem, 7vw, 3rem);
+  }
+
   .slide-container {
     top: 75%;
     width: 70%;

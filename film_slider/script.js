@@ -52,6 +52,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const totalSlides = sliderContent.length
   let activeSlideIndex = 1
   let isAnimating = false
+  let isNavigatingToTarget = false
+  const SLIDE_DURATION = 1.2
+  const TITLE_DURATION = 0.8
+  const TITLE_DELAY = 0
+  const PREVIEW_DURATION = 0.6
+  const PREVIEW_DELAY = 0.18
+  const COUNTER_UPDATE_DELAY_MS = 450
+  const SLIDE_DURATION_MS = Math.round(SLIDE_DURATION * 1000)
 
   if (sliderCounterTotal) {
     sliderCounterTotal.textContent = String(totalSlides)
@@ -78,6 +86,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function getContentByIndex(index) {
     return sliderContent[normalizeSlideIndex(index) - 1]
+  }
+
+  function getNavigationPlan(targetIndex) {
+    const normalizedTargetIndex = normalizeSlideIndex(targetIndex)
+    const nextSteps =
+      (normalizedTargetIndex - activeSlideIndex + totalSlides) % totalSlides
+    const prevSteps =
+      (activeSlideIndex - normalizedTargetIndex + totalSlides) % totalSlides
+
+    if (nextSteps === 0) {
+      return null
+    }
+
+    return nextSteps <= prevSteps
+      ? { direction: 'next', steps: nextSteps }
+      : { direction: 'prev', steps: prevSteps }
   }
 
   function splitTextIntoSpans(element) {
@@ -169,9 +193,9 @@ document.addEventListener('DOMContentLoaded', () => {
       { opacity: 0 },
       {
         opacity: 1,
-        duration: 1,
+        duration: PREVIEW_DURATION,
         ease: 'power2.inOut',
-        delay: 0.45,
+        delay: PREVIEW_DELAY,
         onComplete: () => {
           const previousPreview = sliderPreview.querySelector('img:not(:last-child)')
           if (previousPreview) {
@@ -183,46 +207,58 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function createAndAnimateTitle(content, direction) {
+    const existingTitles = Array.from(sliderTitle.querySelectorAll('h1'))
+    const currentTitle = existingTitles.at(-1) || null
+
+    existingTitles.slice(0, -1).forEach((title) => title.remove())
+
     const newTitle = document.createElement('h1')
     newTitle.innerText = content.name
     sliderTitle.appendChild(newTitle)
     splitTextIntoSpans(newTitle)
 
     const yOffset = direction === 'next' ? 60 : -60
+    const newTitleSpans = newTitle.querySelectorAll('span')
 
-    gsap.set(newTitle.querySelectorAll('span'), { y: yOffset })
-    gsap.to(newTitle.querySelectorAll('span'), {
+    gsap.set(newTitleSpans, { y: yOffset, opacity: 0 })
+    gsap.to(newTitleSpans, {
       y: 0,
-      duration: 1.25,
+      opacity: 1,
+      duration: TITLE_DURATION,
       stagger: 0.02,
       ease: 'hop',
-      delay: 0.25,
+      delay: TITLE_DELAY,
     })
 
-    const currentTitle = sliderTitle.querySelector('h1:not(:last-child)')
     if (currentTitle) {
-      gsap.to(currentTitle.querySelectorAll('span'), {
+      const currentTitleSpans = currentTitle.querySelectorAll('span')
+
+      gsap.killTweensOf(currentTitleSpans)
+      gsap.to(currentTitleSpans, {
         y: -yOffset,
-        duration: 1.25,
-        stagger: 0.02,
-        ease: 'hop',
-        delay: 0.25,
+        opacity: 0,
+        duration: TITLE_DURATION * 0.7,
+        stagger: 0.015,
+        ease: 'power2.in',
         onComplete: () => currentTitle.remove(),
       })
     }
   }
 
   function animateSlide(slide, props) {
-    gsap.to(slide, { ...props, duration: 2, ease: 'hop' })
+    gsap.to(slide, { ...props, duration: SLIDE_DURATION, ease: 'hop' })
     gsap.to(slide.querySelector('.slide-img'), {
       rotation: -props.rotation,
-      duration: 2,
+      duration: SLIDE_DURATION,
       ease: 'hop',
     })
   }
 
   function transitionSlides(direction) {
-    if (isAnimating) return
+    if (isAnimating) {
+      return Promise.resolve(false)
+    }
+
     isAnimating = true
 
     const [outgoingPos, incomingPos] =
@@ -234,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!outgoingSlide || !activeSlide || !incomingSlide) {
       isAnimating = false
-      return
+      return Promise.resolve(false)
     }
 
     animateSlide(incomingSlide, {
@@ -249,7 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
     gsap.to(outgoingSlide, {
       scale: 0,
       opacity: 0,
-      duration: 2,
+      duration: SLIDE_DURATION,
       ease: 'hop',
     })
 
@@ -269,7 +305,7 @@ document.addEventListener('DOMContentLoaded', () => {
     gsap.to(newSlide, {
       scale: 1,
       opacity: 1,
-      duration: 2,
+      duration: SLIDE_DURATION,
       ease: 'hop',
     })
 
@@ -279,16 +315,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
     setTimeout(() => {
       updateCounterAndHighlight(nextActiveIndex)
-    }, 1000)
+    }, COUNTER_UPDATE_DELAY_MS)
 
-    setTimeout(() => {
-      outgoingSlide.remove()
-      activeSlide.className = `slide-container ${outgoingPos}`
-      incomingSlide.className = 'slide-container active'
-      newSlide.className = `slide-container ${incomingPos}`
-      activeSlideIndex = nextActiveIndex
-      isAnimating = false
-    }, 2000)
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        outgoingSlide.remove()
+        activeSlide.className = `slide-container ${outgoingPos}`
+        incomingSlide.className = 'slide-container active'
+        newSlide.className = `slide-container ${incomingPos}`
+        activeSlideIndex = nextActiveIndex
+        isAnimating = false
+        resolve(true)
+      }, SLIDE_DURATION_MS)
+    })
+  }
+
+  async function navigateToSlide(targetIndex) {
+    const plan = getNavigationPlan(targetIndex)
+    if (!plan || isAnimating || isNavigatingToTarget) {
+      return
+    }
+
+    isNavigatingToTarget = true
+
+    for (let step = 0; step < plan.steps; step += 1) {
+      const transitioned = await transitionSlides(plan.direction)
+      if (!transitioned) {
+        break
+      }
+    }
+
+    isNavigatingToTarget = false
   }
 
   function init() {
@@ -302,7 +359,7 @@ document.addEventListener('DOMContentLoaded', () => {
     gsap.fromTo(
       initialTitle.querySelectorAll('span'),
       { y: 60 },
-      { y: 0, duration: 1, stagger: 0.02, ease: 'hop' },
+      { y: 0, duration: TITLE_DURATION, stagger: 0.02, ease: 'hop' },
     )
 
     buildInitialSlides()
@@ -318,19 +375,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     slider.addEventListener('click', (event) => {
       const clickedSlide = event.target.closest('.slide-container')
-      if (!clickedSlide || isAnimating) return
+      if (!clickedSlide || isAnimating || isNavigatingToTarget) return
 
-      transitionSlides(clickedSlide.classList.contains('next') ? 'next' : 'prev')
+      void transitionSlides(clickedSlide.classList.contains('next') ? 'next' : 'prev')
     })
 
     sliderItems.querySelectorAll('p').forEach((item) => {
       item.addEventListener('click', () => {
         const targetIndex = Number(item.dataset.index)
-        if (targetIndex === activeSlideIndex || isAnimating) {
+        if (
+          targetIndex === activeSlideIndex ||
+          isAnimating ||
+          isNavigatingToTarget
+        ) {
           return
         }
 
-        transitionSlides(targetIndex > activeSlideIndex ? 'next' : 'prev')
+        void navigateToSlide(targetIndex)
       })
     })
   }
