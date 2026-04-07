@@ -111,7 +111,8 @@ document.addEventListener('DOMContentLoaded', () => {
       .join('')
   }
 
-  function createSlide(content, className) {
+  function createSlide(index, className) {
+    const content = getContentByIndex(index)
     const slide = document.createElement('div')
     slide.className = `slide-container ${className}`
     slide.innerHTML = `<div class="slide-img"><img src="${content.img}" alt="${content.name}"></div>`
@@ -121,9 +122,9 @@ document.addEventListener('DOMContentLoaded', () => {
   function buildInitialSlides() {
     slider.querySelectorAll('.slide-container').forEach((slide) => slide.remove())
 
-    const prevSlide = createSlide(getContentByIndex(activeSlideIndex - 1), 'prev')
-    const activeSlide = createSlide(getContentByIndex(activeSlideIndex), 'active')
-    const nextSlide = createSlide(getContentByIndex(activeSlideIndex + 1), 'next')
+    const prevSlide = createSlide(activeSlideIndex - 1, 'prev')
+    const activeSlide = createSlide(activeSlideIndex, 'active')
+    const nextSlide = createSlide(activeSlideIndex + 1, 'next')
 
     slider.insertBefore(prevSlide, sliderTitle)
     slider.insertBefore(activeSlide, sliderTitle)
@@ -290,7 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     const newSlideIndex = getSlideIndex(direction === 'next' ? 2 : -2)
-    const newSlide = createSlide(getContentByIndex(newSlideIndex), incomingPos)
+    const newSlide = createSlide(newSlideIndex, incomingPos)
 
     slider.insertBefore(newSlide, sliderTitle)
 
