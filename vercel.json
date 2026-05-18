@@ -57,6 +57,10 @@
       "destination": "/pages/missed.html"
     },
     {
+      "source": "/muscles.html",
+      "destination": "/pages/muscles.html"
+    },
+    {
       "source": "/new-chapter.html",
       "destination": "/pages/new-chapter.html"
     },
@@ -75,6 +79,10 @@
     {
       "source": "/the-snow-storm.html",
       "destination": "/pages/the-snow-storm.html"
+    },
+    {
+      "source": "/tipping-point.html",
+      "destination": "/pages/tipping-point.html"
     },
     {
       "source": "/",
