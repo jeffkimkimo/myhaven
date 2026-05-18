@@ -53,11 +53,12 @@ document.addEventListener('DOMContentLoaded', () => {
   let activeSlideIndex = 1
   let isAnimating = false
   let isNavigatingToTarget = false
+  const imagePreloadCache = new Map()
   const SLIDE_DURATION = 1.2
   const TITLE_DURATION = 0.8
   const TITLE_DELAY = 0
   const PREVIEW_DURATION = 0.6
-  const PREVIEW_DELAY = 0.18
+  const PREVIEW_DELAY = 0
   const COUNTER_UPDATE_DELAY_MS = 450
   const SLIDE_DURATION_MS = Math.round(SLIDE_DURATION * 1000)
 
@@ -88,6 +89,40 @@ document.addEventListener('DOMContentLoaded', () => {
     return sliderContent[normalizeSlideIndex(index) - 1]
   }
 
+  function preloadImage(src) {
+    if (!src) {
+      return Promise.resolve(null)
+    }
+
+    if (imagePreloadCache.has(src)) {
+      return imagePreloadCache.get(src)
+    }
+
+    const request = new Promise((resolve) => {
+      const image = new Image()
+      image.decoding = 'async'
+      image.onload = () => resolve(image)
+      image.onerror = () => resolve(null)
+      image.src = src
+
+      if (image.complete) {
+        resolve(image)
+      }
+    })
+
+    imagePreloadCache.set(src, request)
+    return request
+  }
+
+  function preloadSlidesAround(index) {
+    const offsets = [-2, -1, 0, 1, 2]
+
+    offsets.forEach((offset) => {
+      const content = getContentByIndex(index + offset)
+      void preloadImage(content.img)
+    })
+  }
+
   function getNavigationPlan(targetIndex) {
     const normalizedTargetIndex = normalizeSlideIndex(targetIndex)
     const nextSteps =
@@ -115,7 +150,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const content = getContentByIndex(index)
     const slide = document.createElement('div')
     slide.className = `slide-container ${className}`
-    slide.innerHTML = `<div class="slide-img"><img src="${content.img}" alt="${content.name}"></div>`
+    slide.innerHTML = `
+      <div class="slide-img">
+        <img
+          src="${content.img}"
+          alt="${content.name}"
+          loading="eager"
+          decoding="async"
+          fetchpriority="${className === 'active' ? 'high' : 'auto'}"
+        >
+      </div>
+    `
     return slide
   }
 
@@ -325,6 +370,7 @@ document.addEventListener('DOMContentLoaded', () => {
         incomingSlide.className = 'slide-container active'
         newSlide.className = `slide-container ${incomingPos}`
         activeSlideIndex = nextActiveIndex
+        preloadSlidesAround(activeSlideIndex)
         isAnimating = false
         resolve(true)
       }, SLIDE_DURATION_MS)
@@ -365,6 +411,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     buildInitialSlides()
     buildSliderItems()
+    preloadSlidesAround(activeSlideIndex)
 
     sliderPreview.innerHTML = ''
     const previewImage = document.createElement('img')
