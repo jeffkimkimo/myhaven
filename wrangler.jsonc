@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "jeffkim-porfolio",
+  "compatibility_date": "2026-07-02",
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": "about_me"
+  },
+  "compatibility_flags": [
+    "nodejs_compat"
+  ]
+}
