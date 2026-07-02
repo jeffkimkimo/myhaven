@@ -208,10 +208,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const slideData = getContentByIndex(index)
     const href = slideData.href || ''
     const hasLink = href.trim() !== '' && href !== '#'
+    const isCancelled = slideData.status === 'cancelled'
 
     watchLink.href = hasLink ? href : '#'
-    watchLink.textContent = hasLink ? 'Watch film' : 'Film not yet out'
+    watchLink.textContent = isCancelled
+      ? 'Cancelled'
+      : hasLink
+        ? 'Watch film'
+        : 'Film not yet out'
     watchLink.classList.toggle('is-disabled', !hasLink)
+    watchLink.classList.toggle('is-cancelled', isCancelled)
     watchLink.setAttribute('aria-disabled', String(!hasLink))
     watchLink.tabIndex = hasLink ? 0 : -1
   }
