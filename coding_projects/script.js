@@ -5,7 +5,6 @@ const folderWrappers = [...document.querySelectorAll('.folder-wrapper')]
 const previewImagesAll = [...document.querySelectorAll('.folder-preview-img')]
 const folderPapers = [...document.querySelectorAll('.folder-paper')]
 const PAPER_REST_Y = 74
-const PAPER_PULL_Y = -176
 
 let isMobile = window.innerWidth < 1000
 
@@ -64,8 +63,9 @@ function handleEnter(folder, index) {
 	})
 
 	if (paper) {
+		const paperPullY = -(folder.offsetHeight - 12)
 		gsap.to(paper, {
-			y: PAPER_PULL_Y,
+			y: paperPullY,
 			rotation: gsap.utils.random(-0.2, 0.85),
 			scale: 1,
 			duration: 0.62,

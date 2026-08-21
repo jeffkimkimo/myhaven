@@ -94,6 +94,18 @@
       text-decoration: none;
       color: inherit;
       isolation: isolate;
+      height: 100%;
+      min-width: 0;
+    }
+
+    .folder:hover,
+    .folder:focus-visible {
+      z-index: 8;
+    }
+
+    .folder:focus-visible {
+      outline: 2px solid #0d0f10;
+      outline-offset: -4px;
     }
 
     .folder::after {
@@ -111,13 +123,17 @@
       transition: opacity 0.2s ease, transform 0.2s ease;
     }
 
-    .folder:hover::after {
+    .folder:hover::after,
+    .folder:focus-visible::after {
       opacity: 1;
       transform: translateY(0);
     }
 
     .folder-name h1 {
-      font-size: clamp(1.4rem, 2.9vw, 2.6rem);
+      max-width: calc(100% - 1rem);
+      font-size: clamp(1.2rem, 2vw, 2.15rem);
+      line-height: 0.94;
+      overflow-wrap: anywhere;
     }
 
     .folder-preview {
@@ -237,20 +253,26 @@
       display: none;
     }
 
-    .row:nth-child(1) {
-      bottom: -11rem;
+    .folders {
+      box-sizing: border-box;
+      min-height: 37.5rem;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-rows: repeat(2, clamp(8.5rem, 20svh, 12.5rem));
+      align-content: end;
+      gap: clamp(4rem, 14svh, 8rem) 0;
+      padding-top: 8rem;
     }
 
-    .row:nth-child(2) {
-      bottom: -4.25rem;
-    }
-
-    .row:nth-child(2) .folder:nth-child(1),
-    .row:nth-child(2) .folder:nth-child(2) {
-      flex: 1;
+    .row {
+      display: contents;
     }
 
     @media (max-width: 1000px) {
+      body {
+        overflow-x: hidden;
+      }
+
       .topbar {
         padding: 0.75rem;
       }
@@ -270,7 +292,31 @@
       }
 
       .hint {
-        bottom: 0.55rem;
+        display: none;
+      }
+
+      .folders {
+        display: block;
+        height: auto;
+        min-height: 100svh;
+        overflow: visible;
+        padding: 4.4rem 0 3rem;
+      }
+
+      .folder {
+        box-sizing: border-box;
+        width: 100%;
+        height: 10.25rem;
+        min-height: 10.25rem;
+        margin-bottom: -0.45rem;
+      }
+
+      .folder-name {
+        box-sizing: border-box;
+      }
+
+      .folder-name h1 {
+        font-size: clamp(1.55rem, 7vw, 2.3rem);
       }
 
       .folder::after {
@@ -443,10 +489,163 @@
           </div>
         </a>
       </div>
+
+      <div class="row">
+        <a class="folder variant-1" href="https://github.com/jeffkimkimo/starc" target="_blank" rel="noopener">
+          <div class="folder-preview">
+            <div class="folder-preview-img">
+              <div class="tech-card">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++ logo" />
+                <span>C++</span>
+              </div>
+            </div>
+            <div class="folder-preview-img">
+              <div class="tech-card">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/qt/qt-original.svg" alt="Qt logo" />
+                <span>Qt</span>
+              </div>
+            </div>
+            <div class="folder-preview-img">
+              <div class="tech-card">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="Git logo" />
+                <span>Git</span>
+              </div>
+            </div>
+          </div>
+          <div class="folder-paper" aria-hidden="true">
+            <p class="folder-paper-title">Starc</p>
+            <p class="folder-paper-desc">Desktop screenwriting suite for film, television, comics, stage, and radio, with professional writing and research modules.</p>
+            <div class="folder-paper-logos" aria-hidden="true">
+              <span class="folder-paper-logo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="" /></span>
+              <span class="folder-paper-logo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/qt/qt-original.svg" alt="" /></span>
+              <span class="folder-paper-logo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="" /></span>
+            </div>
+            <p class="folder-paper-stack">C++ · Qt · QMake</p>
+          </div>
+          <div class="folder-wrapper">
+            <div class="folder-index"><p>05</p></div>
+            <div class="folder-name"><h1>Starc</h1></div>
+          </div>
+        </a>
+
+        <a class="folder variant-2" href="https://github.com/jeffkimkimo/eric-edson-story-skill" target="_blank" rel="noopener">
+          <div class="folder-preview">
+            <div class="folder-preview-img">
+              <div class="tech-card">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/markdown/markdown-original.svg" alt="Markdown logo" />
+                <span>Markdown</span>
+              </div>
+            </div>
+            <div class="folder-preview-img">
+              <div class="tech-card">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/yaml/yaml-original.svg" alt="YAML logo" />
+                <span>YAML</span>
+              </div>
+            </div>
+            <div class="folder-preview-img">
+              <div class="tech-card">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub logo" />
+                <span>Codex skill</span>
+              </div>
+            </div>
+          </div>
+          <div class="folder-paper" aria-hidden="true">
+            <p class="folder-paper-title">Eric Edson Story Skill</p>
+            <p class="folder-paper-desc">Codex skill that applies Eric Edson's method to screenplay premises, three-act structure, Hero Goal sequences, and character roles.</p>
+            <div class="folder-paper-logos" aria-hidden="true">
+              <span class="folder-paper-logo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/markdown/markdown-original.svg" alt="" /></span>
+              <span class="folder-paper-logo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/yaml/yaml-original.svg" alt="" /></span>
+              <span class="folder-paper-logo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="" /></span>
+            </div>
+            <p class="folder-paper-stack">Codex Skill · Markdown · YAML</p>
+          </div>
+          <div class="folder-wrapper">
+            <div class="folder-index"><p>06</p></div>
+            <div class="folder-name"><h1>Eric Edson Story Skill</h1></div>
+          </div>
+        </a>
+      </div>
+
+      <div class="row">
+        <a class="folder variant-3" href="https://github.com/jeffkimkimo/movie_clip_identifier" target="_blank" rel="noopener">
+          <div class="folder-preview">
+            <div class="folder-preview-img">
+              <div class="tech-card">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python logo" />
+                <span>Python</span>
+              </div>
+            </div>
+            <div class="folder-preview-img">
+              <div class="tech-card">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/opencv/opencv-original.svg" alt="OpenCV logo" />
+                <span>pHash</span>
+              </div>
+            </div>
+            <div class="folder-preview-img">
+              <div class="tech-card">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg" alt="SQLite logo" />
+                <span>SQLite</span>
+              </div>
+            </div>
+          </div>
+          <div class="folder-paper" aria-hidden="true">
+            <p class="folder-paper-title">Movie Clip Identifier</p>
+            <p class="folder-paper-desc">CLI proof of concept that fingerprints sampled video frames with pHash and matches a query clip against a local SQLite catalog.</p>
+            <div class="folder-paper-logos" aria-hidden="true">
+              <span class="folder-paper-logo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="" /></span>
+              <span class="folder-paper-logo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/opencv/opencv-original.svg" alt="" /></span>
+              <span class="folder-paper-logo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg" alt="" /></span>
+            </div>
+            <p class="folder-paper-stack">Python · pHash · FFmpeg · SQLite</p>
+          </div>
+          <div class="folder-wrapper">
+            <div class="folder-index"><p>07</p></div>
+            <div class="folder-name"><h1>Movie Clip Identifier</h1></div>
+          </div>
+        </a>
+
+        <a class="folder variant-1" href="https://github.com/jeffkimkimo/Eilik-Robot" target="_blank" rel="noopener">
+          <div class="folder-preview">
+            <div class="folder-preview-img">
+              <div class="tech-card">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python logo" />
+                <span>Python</span>
+              </div>
+            </div>
+            <div class="folder-preview-img">
+              <div class="tech-card">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytest/pytest-original.svg" alt="Pytest logo" />
+                <span>Pytest</span>
+              </div>
+            </div>
+            <div class="folder-preview-img">
+              <div class="tech-card">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="Git logo" />
+                <span>Git</span>
+              </div>
+            </div>
+          </div>
+          <div class="folder-paper" aria-hidden="true">
+            <p class="folder-paper-title">Eilik Robot</p>
+            <p class="folder-paper-desc">Early-stage research toolkit for exploring Eilik companion robots through Bluetooth LE discovery, connection, and GATT introspection.</p>
+            <div class="folder-paper-logos" aria-hidden="true">
+              <span class="folder-paper-logo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="" /></span>
+              <span class="folder-paper-logo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytest/pytest-original.svg" alt="" /></span>
+              <span class="folder-paper-logo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="" /></span>
+            </div>
+            <p class="folder-paper-stack">Python · Bluetooth LE · Bleak</p>
+          </div>
+          <div class="folder-wrapper">
+            <div class="folder-index"><p>08</p></div>
+            <div class="folder-name"><h1>Eilik Robot</h1></div>
+          </div>
+        </a>
+      </div>
+
     </div>
   </div>
 
-  <p class="hint">Hover folders to preview. Click to open code.</p>
+  <p class="hint">Hover to preview. Select to open a project.</p>
 
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/gsap.min.js"></script>
   <script src="../coding_projects/script.js"></script>

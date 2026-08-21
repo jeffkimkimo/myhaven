@@ -4,6 +4,12 @@ const menuItems = [
 	{ label: 'Code', icon: 'code-slash-sharp', href: 'pages/code.html' },
 	{ label: 'Blender', icon: 'cube-sharp', href: 'pages/blender-renders.html' },
 	{ label: 'Resume', icon: 'document-text-sharp', href: 'pages/resume.html' },
+	{
+		label: 'Certificate',
+		icon: 'ribbon-sharp',
+		href: 'assets/docs/CodePath%20Foundations%20of%20AI%20Engineering%20Certificate.pdf',
+		target: '_blank',
+	},
 	{ label: 'Inspiration', icon: 'sparkles-sharp', href: 'pages/inspirations.html' },
 ]
 
@@ -78,6 +84,10 @@ function createSegment(item, index, total) {
 	const segment = document.createElement('a')
 	segment.className = 'menu-segment'
 	segment.href = item.href
+	if (item.target) {
+		segment.target = item.target
+		segment.rel = 'noopener'
+	}
 
 	const { menuSize, center, innerRadius, outerRadius, contentRadius } =
 		responsiveConfig
