@@ -36,3 +36,30 @@ myhaven/
 - Keep reusable media in `assets/` instead of project root.
 - Keep feature-specific code inside its own folder (`about_me/`, `animation_1/`, etc.).
 - Use relative links that match this structure.
+
+## Maintenance scripts
+
+Two scripts, both optional — the site is plain static files and runs without them.
+
+**`tools/optimize-images.py`** — writes correctly sized `.webp` copies next to
+the image masters. Run it after adding images:
+
+```sh
+python3 tools/optimize-images.py
+```
+
+Masters live in `assets/images/`, `inspirations/` and `assets/_originals/` and
+are never deleted. The site serves the copies in the `*-web/` folders.
+`.vercelignore` keeps the masters in the repo but out of the deploy.
+
+**`tools/build-film-pages.py`** — the eight Instagram film pages come from
+`tools/film-page.template.html` plus a table in the script. Add a film by adding
+one line, then:
+
+```sh
+python3 tools/build-film-pages.py           # write the pages
+python3 tools/build-film-pages.py --check   # report drift, write nothing
+```
+
+Only those eight are generated. `death-of-cinema`, `derry`, `goal`, `journal`,
+`robofriend` and `script` are genuinely different pages and are edited by hand.
