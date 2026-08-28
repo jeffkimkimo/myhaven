@@ -235,7 +235,7 @@
       const wrapValue = (value, max) => ((value % max) + max) % max;
 
       const applyImageMeta = (img, item) => {
-        img.src = encodeURI(`../inspirations/${item.file}`);
+        img.src = encodeURI(`../inspirations-web/${item.file.replace(/\.[^.]+$/, '.webp')}`);
         img.alt = item.name;
         if (item.position) {
           img.style.objectPosition = item.position;

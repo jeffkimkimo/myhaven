@@ -1,0 +1,12 @@
+# Image masters. These are the inputs to tools/optimize-images.py; the site now
+# serves the correctly-sized copies in *-web/ folders. Keeping the masters out
+# of the deploy is the difference between uploading ~215 MB and ~7 MB.
+#
+# They stay in the repo — nothing here is deleted, only left undeployed.
+assets/images/blender/
+assets/images/films/
+assets/_originals/
+inspirations/
+
+# Build tooling
+tools/
