@@ -128,6 +128,28 @@ a {
   display: block;
   fill: currentColor;
 }
+/* ================= TOUCH TARGETS =================
+   The social icons render at 18x23px and the close button at 24x24px, which is
+   well under the ~44px a finger needs. These pseudo-elements enlarge the
+   tappable box only — the icons, spacing and layout are untouched, so nothing
+   moves and nothing looks different. The horizontal inset stops at 8px so
+   neighbouring targets meet exactly rather than overlapping. */
+.close-btn,
+.menu-overlay-nav .menu-overlay-items a {
+  position: relative;
+}
+
+.close-btn::after,
+.menu-overlay-nav .menu-overlay-items a::after {
+  content: "";
+  position: absolute;
+  inset: -11px -8px;
+}
+
+.close-btn::after {
+  inset: -10px;
+}
+
 /* ================= CIRCULAR MENU ================= */
 .circular-menu {
   position: relative;

@@ -234,8 +234,25 @@
 
       const wrapValue = (value, max) => ((value % max) + max) % max;
 
-      const applyImageMeta = (img, item) => {
-        img.src = encodeURI(`../inspirations-web/${item.file.replace(/\.[^.]+$/, '.webp')}`);
+      // Fetch the centred slide and its neighbours, nothing else. Keeps the page
+      // to a handful of images instead of all 55 on first load.
+      const SLIDE_WINDOW = 2;
+      const ensureLoaded = (centerIndex) => {
+        for (let offset = -SLIDE_WINDOW; offset <= SLIDE_WINDOW; offset += 1) {
+          const img = slideImages[wrapValue(centerIndex + offset, totalSlides)];
+          if (img && img.dataset.src) {
+            img.src = img.dataset.src;
+            delete img.dataset.src;
+          }
+        }
+      };
+
+      const webpName = (item) => item.file.replace(/\.[^.]+$/, '.webp');
+      const slideSrc = (item) => encodeURI(`../inspirations-web/${webpName(item)}`);
+      const thumbSrc = (item) => encodeURI(`../inspirations-web/thumb/${webpName(item)}`);
+
+      const applyImageMeta = (img, item, src) => {
+        img.src = src;
         img.alt = item.name;
         if (item.position) {
           img.style.objectPosition = item.position;
@@ -249,8 +266,18 @@
           slide.className = 'slide';
 
           const img = document.createElement('img');
-          applyImageMeta(img, item);
-          img.loading = index < 6 ? 'eager' : 'lazy';
+          // Slides are laid out on one long transformed track, so the browser
+          // cannot lazy-load them itself — every one counted as "in viewport".
+          // Only the slides near the centre get a src; see ensureLoaded below.
+          // A 1x1 transparent placeholder until the slide enters the window.
+          // An <img> with no src at all reports as broken and some browsers
+          // paint a broken-image icon for it.
+          img.src = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+          img.dataset.src = slideSrc(item);
+          img.alt = item.name;
+          if (item.position) {
+            img.style.objectPosition = item.position;
+          }
           img.decoding = 'async';
           if (index === 0) {
             img.fetchPriority = 'high';
@@ -262,6 +289,7 @@
           slideImages.push(img);
         });
         slider.appendChild(fragment);
+        ensureLoaded(0);
       };
 
       const createThumbnailItems = () => {
@@ -275,7 +303,7 @@
           thumbnail.dataset.baseAngle = String((index / totalSlides) * Math.PI * 2);
 
           const img = document.createElement('img');
-          applyImageMeta(img, item);
+          applyImageMeta(img, item, thumbSrc(item));
           img.loading = 'lazy';
           img.decoding = 'async';
 
@@ -359,6 +387,8 @@
           const scale = 1 + easedProgress * (maxScale - 1);
           slideImages[i].style.transform = `translateZ(0) scale(${scale.toFixed(3)})`;
         }
+
+        ensureLoaded(centerSlideIndex);
 
         if (centerSlideIndex !== lastTitleIndex) {
           lastTitleIndex = centerSlideIndex;

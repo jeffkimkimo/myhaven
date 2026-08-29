@@ -50,6 +50,11 @@ python3 tools/optimize-images.py
 
 Masters live in `assets/images/`, `inspirations/` and `assets/_originals/` and
 are never deleted. The site serves the copies in the `*-web/` folders.
+
+Two sizes are produced for the galleries. `*-web/` holds the full-size copy and
+`*-web/thumb/` holds a small one. The blender ring and the inspiration wheel
+draw their images at 54-81px, so they load the small copy; the full-size one is
+fetched only when a render is focused or a slide scrolls into view.
 `.vercelignore` keeps the masters in the repo but out of the deploy.
 
 **`tools/build-film-pages.py`** — the eight Instagram film pages come from

@@ -114,6 +114,16 @@ def replace_in_place(path, longest, quality, fmt):
     return before, after
 
 
+def thumbs(src_dir, dest_dir, longest, quality, label):
+    """Small copies for grids that draw images at tiny sizes.
+
+    The blender ring draws each render at 56-81px and the inspiration wheel
+    draws each face at 54px, but both were downloading the full-size copy. These
+    are what those two grids load; the big copy is fetched only on focus.
+    """
+    return mirror_tree(src_dir, dest_dir, longest, quality, label)
+
+
 def main():
     total_before = total_after = 0
     print("\nGalleries — webp copies written alongside the masters")
@@ -134,6 +144,18 @@ def main():
     b, a = mirror_tree(os.path.join(ROOT, "assets/images/films"),
                        os.path.join(ROOT, "assets/images/films-web"),
                        900, 82, "film posters")
+    total_before += b; total_after += a
+
+    # Ring tiles: 81px at most on a phone, x3 dpr = 243px. 360 is generous.
+    b, a = thumbs(os.path.join(ROOT, "assets/images/blender"),
+                  os.path.join(ROOT, "assets/images/blender-web/thumb"),
+                  360, 78, "blender ring tiles")
+    total_before += b; total_after += a
+
+    # Inspiration wheel faces: 54px, x3 dpr = 162px.
+    b, a = thumbs(os.path.join(ROOT, "inspirations"),
+                  os.path.join(ROOT, "inspirations-web/thumb"),
+                  260, 78, "inspiration thumbnails")
     total_before += b; total_after += a
 
     # Two intro cards, each drawn ~446px wide.

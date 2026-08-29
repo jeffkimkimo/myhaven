@@ -159,6 +159,21 @@
         height: 72vh;
       }
     }
+      .viewer-hint {
+      display: none;
+      margin: 14px 2px 0;
+      font-size: 0.8rem;
+      line-height: 1.55;
+      opacity: 0.75;
+    }
+
+    /* Below this width the embedded page is unreadable and the file is a 1 MB
+       download, so the "Open PDF" action above is the route instead. The frame
+       gets its src from script only when there is room to read it. */
+    @media (max-width: 760px) {
+      .viewer-shell { display: none; }
+      .viewer-hint { display: block; }
+    }
   </style>
 </head>
 <body>
@@ -172,9 +187,24 @@
 
     <section class="viewer-shell" aria-label="Resume viewer">
       <div class="viewer">
-        <iframe src="../assets/docs/Jeffkim%20Official%20Resume.pdf" title="Jeffkim Aminiel Kimo resume"></iframe>
+        <iframe data-src="../assets/docs/Jeffkim%20Official%20Resume.pdf" title="Jeffkim Aminiel Kimo resume"></iframe>
       </div>
     </section>
+
+    <p class="viewer-hint">Tap &ldquo;Open PDF&rdquo; above &mdash; the r&eacute;sum&eacute; reads better full screen than squeezed into a phone-width frame.</p>
   </main>
+  <script>
+    (() => {
+      const frame = document.querySelector('.viewer iframe');
+      if (!frame) return;
+      const load = () => {
+        if (window.matchMedia('(min-width: 761px)').matches && !frame.src) {
+          frame.src = frame.dataset.src;
+        }
+      };
+      load();
+      window.addEventListener('resize', load, { passive: true });
+    })();
+  </script>
 </body>
 </html>

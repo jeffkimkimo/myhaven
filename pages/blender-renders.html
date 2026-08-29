@@ -247,7 +247,10 @@
         const id = index + 1;
         return {
           title: "Render " + String(id).padStart(2, "0"),
-          img: "../assets/images/blender-web/" + id + ".webp"
+          // The ring draws each tile at 56-81px, so it loads the small copy.
+          // The full-size one is fetched only when a render is focused.
+          img: "../assets/images/blender-web/thumb/" + id + ".webp",
+          full: "../assets/images/blender-web/" + id + ".webp"
         };
       });
 
@@ -332,6 +335,7 @@
 
         const img = document.createElement("img");
         img.src = cardData.img;
+        img.dataset.full = cardData.full;
         img.alt = cardData.title;
         img.loading = i < 8 ? "eager" : "lazy";
         img.decoding = "async";
@@ -372,6 +376,17 @@
       function togglePreview(index) {
         isPreviewActive = true;
         isTransitioning = true;
+
+        // Swap the focused card up to the full-size render. Decoded off-thread
+        // first so the upgrade never lands mid-animation as a visible flash.
+        const focusImg = cards[index] && cards[index].querySelector("img");
+        if (focusImg && focusImg.dataset.full) {
+          const full = new Image();
+          full.src = focusImg.dataset.full;
+          const swap = () => { focusImg.src = focusImg.dataset.full; };
+          if (full.decode) full.decode().then(swap).catch(swap);
+          else full.onload = swap;
+        }
 
         const angle = transformState[index].angle;
         const targetPosition = (Math.PI * 3) / 2;

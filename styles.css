@@ -13,7 +13,15 @@
   padding-bottom:10px;
 }
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  /* The decorative body::before/::after glows are position:fixed and the drift
+     animation scales them to 1.03, which overhangs the viewport by ~6px on a
+     phone and gives every page a sideways scroll. They are fixed, so body's
+     overflow-x does not contain them. `clip` stops the overflow without
+     creating a scroll container (which `hidden` would, breaking sticky). */
+  overflow-x: clip;
+}
 body {
   margin: 0;
   font-family: "Poppins", "Segoe UI", "Helvetica Neue", sans-serif;
