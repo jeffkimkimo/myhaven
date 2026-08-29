@@ -7,15 +7,6 @@
   <link rel="icon" type="image/png" href="assets/branding/jklogo2.png">
   <link rel="stylesheet" href="navigation_menu/style.css" />
   <style>
-    body.intro-active {
-      overflow: hidden;
-    }
-
-    body.intro-active .index {
-      opacity: 0;
-      pointer-events: none;
-    }
-
     body.intro-ended .index {
       opacity: 1;
       pointer-events: auto;
@@ -43,11 +34,6 @@
     body.intro-ended .text-about-frame {
       opacity: 1;
       transform: scale(1);
-    }
-
-    body.intro-active .text-about-frame {
-      opacity: 0;
-      pointer-events: none;
     }
 
     .shader-bg-frame {
@@ -104,131 +90,9 @@
       z-index: 100;
     }
 
-    .intro-overlay {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #050507;
-      z-index: 200;
-      transition: opacity 0.45s ease;
-    }
-
-    .intro-overlay.is-hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .intro-hero-overlay {
-      z-index: 220;
-    }
-
-    .intro-hero-frame,
-    .intro-frame {
-      width: 100%;
-      height: 100%;
-      border: 0;
-      display: block;
-      background: #0f0f0f;
-    }
-
-    .intro-overlay-inner {
-      position: relative;
-      width: 100vw;
-      height: 100vh;
-      overflow: hidden;
-      background: #0f0f0f;
-    }
-
-    .intro-note {
-      position: absolute;
-      left: 16px;
-      bottom: 16px;
-      margin: 0;
-      padding: 9px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 215, 128, 0.3);
-      background: rgba(13, 14, 20, 0.75);
-      color: #e7ddc3;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      font-size: 0.82rem;
-      z-index: 2;
-    }
-
-    .intro-note.is-typing::after {
-      content: "";
-      display: inline-block;
-      width: 1px;
-      height: 0.92em;
-      margin-left: 0.28em;
-      background: currentColor;
-      vertical-align: -0.08em;
-      animation: intro-note-caret 0.9s steps(1, end) infinite;
-    }
-
-    @keyframes intro-note-caret {
-      0%,
-      49% {
-        opacity: 1;
-      }
-      50%,
-      100% {
-        opacity: 0;
-      }
-    }
-
-    .intro-enter {
-      position: absolute;
-      right: 16px;
-      bottom: 16px;
-      padding: 10px 16px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 215, 128, 0.5);
-      background: rgba(13, 14, 20, 0.85);
-      color: #f6c344;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      cursor: pointer;
-      z-index: 2;
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-      transform: translateY(8px);
-      transition: opacity 0.22s ease, visibility 0.22s ease, transform 0.22s ease, background 0.18s ease, border-color 0.18s ease;
-    }
-
-    .intro-enter.is-visible {
-      opacity: 1;
-      visibility: visible;
-      pointer-events: auto;
-      transform: translateY(0);
-    }
-
-    .intro-enter:hover {
-      transform: translateY(-2px);
-      background: rgba(246, 195, 68, 0.12);
-      border-color: rgba(246, 195, 68, 0.85);
-    }
-
-    @media (max-width: 720px) {
-      .intro-note {
-        max-width: calc(100% - 24px);
-        font-size: 0.7rem;
-      }
-
-      .intro-enter {
-        right: 12px;
-        bottom: 12px;
-        padding: 8px 12px;
-        font-size: 0.72rem;
-      }
-    }
   </style>
 </head>
-<body class="intro-active">
+<body class="intro-ended">
   <iframe
     id="menu-shader"
     class="shader-bg-frame"
@@ -245,30 +109,6 @@
     loading="eager"
     aria-hidden="true"
   ></iframe>
-
-  <div id="intro-hero-overlay" class="intro-overlay intro-hero-overlay" aria-hidden="false">
-    <iframe
-      id="intro-hero-frame"
-      class="intro-hero-frame"
-      src="intro_hero/index.html"
-      title="Portfolio hero loader"
-      loading="eager"
-    ></iframe>
-  </div>
-
-  <div id="intro-overlay" class="intro-overlay is-hidden" aria-hidden="true">
-    <div class="intro-overlay-inner" role="dialog" aria-modal="true" aria-label="Portfolio intro animation">
-      <iframe
-        id="intro-frame"
-        class="intro-frame"
-        src="animation_1/index.html"
-        title="Portfolio intro animation"
-        loading="eager"
-      ></iframe>
-      <p id="intro-note" class="intro-note" data-text="Scroll">Scroll</p>
-      <button id="intro-enter" class="intro-enter" type="button">Enter Portfolio</button>
-    </div>
-  </div>
 
   <div class="index">
     <div class="menu-toggle-btn" aria-label="Open menu" role="button" tabindex="0">
@@ -335,271 +175,24 @@
   <script src="navigation_menu/script.js"></script>
   <script>
     (() => {
-      const introHeroOverlay = document.getElementById('intro-hero-overlay');
-      const introHeroFrame = document.getElementById('intro-hero-frame');
-      const introOverlay = document.getElementById('intro-overlay');
-      const introFrame = document.getElementById('intro-frame');
-      const introNote = document.getElementById('intro-note');
-      const introEnter = document.getElementById('intro-enter');
+      // The intro sequence was removed; the portfolio is the landing state.
+      // All that remains is bringing the menu shader up once it has loaded.
       const shaderFrame = document.getElementById('menu-shader');
-      let shaderLoaded = false;
-      let shaderActivationRequested = false;
-      let introCompleted = false;
-      let introEnterFallbackTimer = null;
-      let introNoteTimer = null;
-      const INTRO_ENTER_FAILSAFE_MS = 18000;
-      const INTRO_NOTE_DEFAULT_TEXT = (introNote?.dataset.text || 'Scroll').trim() || 'Scroll';
-
-      if (!introHeroOverlay || !introOverlay || !introFrame || !introHeroFrame) {
-        document.body.classList.remove('intro-active');
-        return;
-      }
-
-      const url = new URL(window.location.href);
-      const skipByParam = url.searchParams.has('skipIntro');
-      let heroFallbackTimer = null;
-      const isInternalReferrer = (() => {
-        if (!document.referrer) return false;
-        try {
-          const refUrl = new URL(document.referrer);
-          if (refUrl.origin === window.location.origin) {
-            return refUrl.pathname !== window.location.pathname;
-          }
-        } catch (error) {
-          return false;
-        }
-        return false;
-      })();
-
-      const clearHeroFallback = () => {
-        if (!heroFallbackTimer) return;
-        window.clearTimeout(heroFallbackTimer);
-        heroFallbackTimer = null;
-      };
-
-      const clearIntroEnterFallback = () => {
-        if (!introEnterFallbackTimer) return;
-        window.clearTimeout(introEnterFallbackTimer);
-        introEnterFallbackTimer = null;
-      };
-
-      const clearIntroNoteTimer = () => {
-        if (!introNoteTimer) return;
-        window.clearTimeout(introNoteTimer);
-        introNoteTimer = null;
-      };
-
-      const hideOverlay = (overlay) => {
-        overlay.classList.add('is-hidden');
-        overlay.setAttribute('aria-hidden', 'true');
-      };
-
-      const showOverlay = (overlay) => {
-        overlay.classList.remove('is-hidden');
-        overlay.setAttribute('aria-hidden', 'false');
-      };
-
-      const reloadFrame = (frame) => {
-        const src = frame.getAttribute('src');
-        if (src) {
-          frame.setAttribute('src', src);
-        }
-      };
-
-      const hideIntroEnter = () => {
-        if (!introEnter) return;
-        introEnter.classList.remove('is-visible');
-        introEnter.disabled = true;
-      };
-
-      const stopIntroNoteTyping = (restoreDefaultText = true) => {
-        clearIntroNoteTimer();
-        if (!introNote) return;
-        introNote.classList.remove('is-typing');
-        if (restoreDefaultText) {
-          introNote.textContent = INTRO_NOTE_DEFAULT_TEXT;
-        }
-      };
-
-      const startIntroNoteTyping = () => {
-        if (!introNote || introCompleted) return;
-        stopIntroNoteTyping(false);
-        introNote.classList.add('is-typing');
-
-        let charIndex = 0;
-        let deleting = false;
-
-        const tick = () => {
-          if (!introNote || introCompleted || introOverlay.classList.contains('is-hidden')) {
-            return;
-          }
-
-          introNote.textContent = INTRO_NOTE_DEFAULT_TEXT.slice(0, charIndex);
-
-          if (!deleting) {
-            if (charIndex < INTRO_NOTE_DEFAULT_TEXT.length) {
-              charIndex += 1;
-              introNoteTimer = window.setTimeout(tick, 95);
-              return;
-            }
-
-            deleting = true;
-            introNoteTimer = window.setTimeout(tick, 900);
-            return;
-          }
-
-          if (charIndex > 0) {
-            charIndex -= 1;
-            introNoteTimer = window.setTimeout(tick, 65);
-            return;
-          }
-
-          deleting = false;
-          introNoteTimer = window.setTimeout(tick, 360);
-        };
-
-        introNote.textContent = '';
-        introNoteTimer = window.setTimeout(tick, 280);
-      };
-
-      const showIntroEnter = () => {
-        if (!introEnter) return;
-        introEnter.classList.add('is-visible');
-        introEnter.disabled = false;
-        clearIntroEnterFallback();
-      };
-
-      const startIntroEnterFallback = () => {
-        clearIntroEnterFallback();
-        introEnterFallbackTimer = window.setTimeout(() => {
-          if (!introCompleted && !introOverlay.classList.contains('is-hidden')) {
-            showIntroEnter();
-          }
-        }, INTRO_ENTER_FAILSAFE_MS);
-      };
-
-      const primeMenuShader = () => {
-        if (!shaderFrame) return;
-        if (!shaderFrame.getAttribute('src')) {
-          shaderFrame.setAttribute('src', 'webshadergl/embed.html');
-        }
-      };
-
-      const showMenuShaderIfReady = () => {
-        if (!shaderFrame || !shaderLoaded || !shaderActivationRequested) return;
-        shaderFrame.classList.add('is-active');
-      };
-
-      const activateMenuShader = () => {
-        if (!shaderFrame) return;
-        shaderActivationRequested = true;
-        primeMenuShader();
-        showMenuShaderIfReady();
-      };
-
-      const finishIntro = () => {
-        if (introCompleted) {
-          return;
-        }
-        introCompleted = true;
-        clearHeroFallback();
-        clearIntroEnterFallback();
-        stopIntroNoteTyping();
-        hideOverlay(introHeroOverlay);
-        hideOverlay(introOverlay);
-        hideIntroEnter();
-        document.body.classList.remove('intro-active');
-        document.body.classList.add('intro-ended');
-        activateMenuShader();
-      };
-
-      const startAnimationIntro = () => {
-        if (introCompleted) {
-          return;
-        }
-        clearHeroFallback();
-        hideOverlay(introHeroOverlay);
-        showOverlay(introOverlay);
-        document.body.classList.add('intro-active');
-        document.body.classList.remove('intro-ended');
-        hideIntroEnter();
-        startIntroNoteTyping();
-        primeMenuShader();
-        reloadFrame(introFrame);
-        startIntroEnterFallback();
-      };
-
-      const startHeroLoader = () => {
-        if (introCompleted) {
-          return;
-        }
-        showOverlay(introHeroOverlay);
-        hideOverlay(introOverlay);
-        document.body.classList.add('intro-active');
-        document.body.classList.remove('intro-ended');
-        hideIntroEnter();
-        stopIntroNoteTyping();
-        clearIntroEnterFallback();
-        primeMenuShader();
-        reloadFrame(introHeroFrame);
-        clearHeroFallback();
-        heroFallbackTimer = window.setTimeout(() => {
-          startAnimationIntro();
-        }, 12000);
-      };
-
-      const isMessageFromFrame = (event, frame, messageType) => {
-        if (event.source !== frame.contentWindow) {
-          return false;
-        }
-        if (!event.data || event.data.type !== messageType) {
-          return false;
-        }
-        if (event.origin && event.origin !== 'null' && event.origin !== window.location.origin) {
-          return false;
-        }
-        return true;
-      };
-
-      window.addEventListener('message', (event) => {
-        if (introCompleted) {
-          return;
-        }
-        if (isMessageFromFrame(event, introHeroFrame, 'intro-hero-complete')) {
-          startAnimationIntro();
-          return;
-        }
-        if (isMessageFromFrame(event, introFrame, 'intro-scroll-end')) {
-          showIntroEnter();
-        }
-      });
-
-      if (introEnter) {
-        introEnter.addEventListener('click', finishIntro);
-      }
-
       if (shaderFrame) {
         shaderFrame.addEventListener('load', () => {
-          shaderLoaded = true;
-          showMenuShaderIfReady();
-        });
+          shaderFrame.classList.add('is-active');
+        }, { once: true });
+        shaderFrame.setAttribute('src', 'webshadergl/embed.html');
       }
 
-      window.addEventListener('load', () => {
-        if (skipByParam || isInternalReferrer) {
-          finishIntro();
-          if (skipByParam) {
-            url.searchParams.delete('skipIntro');
-            const cleanUrl =
-              url.pathname +
-              (url.searchParams.toString() ? `?${url.searchParams.toString()}` : '') +
-              url.hash;
-            window.history.replaceState({}, '', cleanUrl);
-          }
-          return;
-        }
-        startHeroLoader();
-      });
+      // Older links still carry ?skipIntro=1. It no longer does anything, so
+      // tidy it out of the address bar rather than leaving it on screen.
+      const url = new URL(window.location.href);
+      if (url.searchParams.has('skipIntro')) {
+        url.searchParams.delete('skipIntro');
+        const q = url.searchParams.toString();
+        window.history.replaceState({}, '', url.pathname + (q ? `?${q}` : '') + url.hash);
+      }
     })();
   </script>
 </body>
